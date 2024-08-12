@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.NumberLineFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="bottom">
+
+            <com.zendalona.mathmantra.ui.NumberLineView
+                android:id="@+id/numberLineView"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:focusable="false"
+                android:clickable="false"
+                android:layout_marginBottom="10dp" />
+
+        <!-- Buttons for Navigation -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:focusable="false">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnLeft"
+                android:layout_width="wrap_content"
+                android:layout_height="72dp"
+                android:layout_margin="5dp"
+                android:textSize="36sp"
+                android:layout_weight="0.5"
+                android:text="-" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/current_position_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="24sp"
+                android:textAlignment="center"
+                android:layout_gravity="center"
+                android:focusable="true"
+                android:clickable="false"
+                android:text="@string/use_to_move"
+                android:layout_marginBottom="10dp"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnRight"
+                android:layout_width="wrap_content"
+                android:layout_height="72dp"
+                android:layout_margin="5dp"
+                android:textSize="36sp"
+                android:layout_weight="0.5"
+                android:text="+" />
+        </LinearLayout>
+    </LinearLayout>
+
+
+</FrameLayout>
