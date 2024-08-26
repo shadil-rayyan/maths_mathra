@@ -44,6 +44,7 @@ public class TapTablaFragment extends Fragment {
         binding.tapCount.setText(String.valueOf(++count));
         binding.tablaAnimationView.playAnimation();
         soundEffectUtility.playSound(R.raw.drums_sound);
+        //TODO : if count == askedFor(<=9), display appreciation popup ; set count = 0 and a new asked for
     }
 
     @Override

@@ -65,7 +65,6 @@ public class MCQFragment extends Fragment {
         binding.optionC.setText(String.valueOf(choices.get(2)));
         binding.optionD.setText(String.valueOf(choices.get(3)));
 
-
         binding.optionA
                 .setOnClickListener(v -> showResultDialog(Integer.parseInt(binding.optionA.getText().toString()) == numbers[2]));
         binding.optionB

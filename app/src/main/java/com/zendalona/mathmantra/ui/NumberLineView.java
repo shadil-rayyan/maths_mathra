@@ -4,12 +4,11 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
-
 import androidx.core.content.ContextCompat;
-
 import com.zendalona.mathmantra.R;
+import com.zendalona.mathmantra.utils.NumberLineValues;
 
 public class NumberLineView extends View {
 
@@ -18,8 +17,8 @@ public class NumberLineView extends View {
     private Paint numberPaint;
     private Paint mascotPaint;
 
-    private final int numberRangeStart = -5;
-    private final int numberRangeEnd = 5;
+    private int numberRangeStart = NumberLineValues.getNumberLineStart();
+    private int numberRangeEnd = NumberLineValues.getNumberLineEnd();
     private float gap;
 
     public NumberLineView(Context context) {
@@ -38,7 +37,7 @@ public class NumberLineView extends View {
     }
 
     private void init() {
-        currentPosition = 0;
+        currentPosition = NumberLineValues.getCurrentPosition();
         linePaint = new Paint();
         int lineColor = ContextCompat.getColor(getContext(), R.color.blue);
         linePaint.setColor(lineColor);
@@ -70,6 +69,7 @@ public class NumberLineView extends View {
         gap = (endX - startX) / (numberRangeEnd - numberRangeStart );
 
         // Draw numbers on the number line
+        Log.d("Drawing number line from : ", numberRangeStart + "<->" + numberRangeEnd);
         for (int number = numberRangeStart; number <= numberRangeEnd; number++) {
             float x = startX + (number - numberRangeStart) * gap;
             canvas.drawText(String.valueOf(number), x, centerY + 50f, numberPaint);
@@ -86,19 +86,27 @@ public class NumberLineView extends View {
     }
 
     public int moveLeft() {
-        if (currentPosition > numberRangeStart) {
-            currentPosition--;
-            invalidate();
-        }
+        currentPosition--;
+        invalidate();
         return currentPosition;
     }
 
     public int moveRight() {
-        if (currentPosition < numberRangeEnd) {
-            currentPosition++;
-            invalidate();
-        }
+        currentPosition++;
+        invalidate();
         return currentPosition;
     }
 
+    public void reDrawNumberLine(){
+        Log.d("Redrawing number line","tadaaa");
+        invalidate(); // redraw number line
+    }
+
+    public int getNumberRangeStart(){
+        return this.numberRangeStart;
+    }
+
+    public int getNumberRangeEnd() {
+        return this.numberRangeEnd;
+    }
 }

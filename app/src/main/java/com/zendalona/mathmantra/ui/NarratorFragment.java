@@ -5,10 +5,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.zendalona.mathmantra.R;
 import com.zendalona.mathmantra.databinding.FragmentNarratorBinding;
-import com.zendalona.mathmantra.databinding.FragmentRingBellBinding;
 import com.zendalona.mathmantra.utils.TTSUtility;
 
 public class NarratorFragment extends Fragment {

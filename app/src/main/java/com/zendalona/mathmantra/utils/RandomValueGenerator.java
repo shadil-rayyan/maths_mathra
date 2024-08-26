@@ -11,6 +11,14 @@ public class RandomValueGenerator {
         this.random = new Random();
     }
 
+    public int generateNumberForBellRing() {
+        return random.nextInt(16);
+    }
+
+    public int generateNumberForDrumBeats() {
+        return random.nextInt(50 + 1);
+    }
+
     public int[] generateAdditionValues(Difficulty difficulty) {
         int[] values = new int[3];
         switch (difficulty) {
@@ -103,4 +111,5 @@ public class RandomValueGenerator {
         values[2] = values[0] / values[1];
         return values;
     }
+
 }

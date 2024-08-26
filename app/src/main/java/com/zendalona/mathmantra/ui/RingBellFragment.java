@@ -7,18 +7,21 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import com.airbnb.lottie.LottieAnimationView;
 import com.zendalona.mathmantra.R;
 import com.zendalona.mathmantra.databinding.FragmentRingBellBinding;
 import com.zendalona.mathmantra.utils.AccelerometerUtility;
+import com.zendalona.mathmantra.utils.RandomValueGenerator;
 import com.zendalona.mathmantra.utils.SoundEffectUtility;
+import com.zendalona.mathmantra.utils.TTSUtility;
 
 public class RingBellFragment extends Fragment {
 
     private FragmentRingBellBinding binding;
     private AccelerometerUtility accelerometerUtility;
     private SoundEffectUtility soundEffectUtility;
-    int count;
+    private RandomValueGenerator randomValueGenerator;
+    private TTSUtility tts;
+    int count, target;
 
     public RingBellFragment() {
         // Required empty public constructor
@@ -34,7 +37,13 @@ public class RingBellFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentRingBellBinding.inflate(inflater, container, false);
+        randomValueGenerator = new RandomValueGenerator();
+        tts = new TTSUtility(requireContext());
         count = 0;
+        target = randomValueGenerator.generateNumberForBellRing();
+        String targetText = "Ring the bell" + target + " times";
+        tts.speak(targetText);
+        binding.ringMeTv.setText(targetText);
         return binding.getRoot();
     }
 
@@ -42,6 +51,10 @@ public class RingBellFragment extends Fragment {
         binding.ringCount.setText(String.valueOf(++count));
         binding.bellAnimationView.playAnimation();
         soundEffectUtility.playSound(R.raw.bell_ring);
+        if(count == target){
+
+        }
+        //TODO : if count == askedFor(<=9), display appreciation popup ; set count = 0 and a new asked for
     }
 
     @Override
@@ -50,10 +63,14 @@ public class RingBellFragment extends Fragment {
         // Start a thread to check for shakes
         new Thread(() -> {
             while (isVisible()) {
-                try {Thread.sleep(200);} catch (InterruptedException e) {
-                    Log.d("Errrr","Errrr");
-                    e.printStackTrace();}
-                if (accelerometerUtility.isDeviceShaken()) requireActivity().runOnUiThread(() -> ringBell());
+                try {
+                    Thread.sleep(200);
+                }
+                catch (InterruptedException e) {
+                    Log.d("Accelerometer Thread sleep Error",e.getLocalizedMessage());
+                    e.printStackTrace();
+                }
+                if (accelerometerUtility.isDeviceShaken()) requireActivity().runOnUiThread(this::ringBell);
             }
         }).start();
     }
@@ -68,5 +85,6 @@ public class RingBellFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+        tts.shutdown();
     }
 }
