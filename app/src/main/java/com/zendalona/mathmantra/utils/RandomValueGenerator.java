@@ -20,6 +20,12 @@ public class RandomValueGenerator {
         return random.nextInt(16);
     }
 
+    public int[] generateNumberRangeForCount(int upperBound){
+        int start = random.nextInt(upperBound - 10);
+        int end = random.nextInt(11) + start + 1;
+        return new int[]{start, end};
+    }
+
     public int[] generateAdditionValues(Difficulty difficulty) {
         int[] values = new int[3];
         switch (difficulty) {

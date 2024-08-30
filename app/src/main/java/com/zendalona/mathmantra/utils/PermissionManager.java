@@ -58,7 +58,7 @@ public class PermissionManager {
                 Log.w(TAG  + " :: requestPermission()", "Permission not already granted. " + permissionToRequest + "w/" + getRequestCode());
                 String[] permissionsToRequest = {Manifest.permission.RECORD_AUDIO, Manifest.permission.BODY_SENSORS};
                 Log.i(TAG, "requesting permissions : " + Arrays.toString(permissionsToRequest));
-                ActivityCompat.requestPermissions(activity, permissionsToRequest, 100);
+                ActivityCompat.requestPermissions(activity, permissionsToRequest, 101);
 //                ActivityCompat.requestPermissions(activity, new String[]{permissionToRequest}, 42);
             }
         }

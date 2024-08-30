@@ -15,6 +15,7 @@ import com.zendalona.mathmantra.databinding.DialogResultBinding;
 import com.zendalona.mathmantra.databinding.FragmentMCQBinding;
 import com.zendalona.mathmantra.enums.Difficulty;
 import com.zendalona.mathmantra.utils.RandomValueGenerator;
+import com.zendalona.mathmantra.utils.TTSUtility;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -28,6 +29,7 @@ public class MCQFragment extends Fragment {
 
     private FragmentMCQBinding binding;
     private RandomValueGenerator random;
+    private TTSUtility tts;
 
     public MCQFragment() {
     }
@@ -43,6 +45,7 @@ public class MCQFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentMCQBinding.inflate(inflater, container, false);
         random = new RandomValueGenerator();
+        tts = new TTSUtility(requireActivity());
         generateNewQuestion();
         return binding.getRoot();
     }
@@ -98,6 +101,7 @@ public class MCQFragment extends Fragment {
     private void showResultDialog(boolean isCorrect) {
         String message = isCorrect ? "Right Answer" : "Wrong Answer";
         int gifResource = isCorrect ? R.drawable.right : R.drawable.wrong;
+        tts.speak(message);
 
         LayoutInflater inflater = getLayoutInflater();
         DialogResultBinding dialogBinding = DialogResultBinding.inflate(inflater);
