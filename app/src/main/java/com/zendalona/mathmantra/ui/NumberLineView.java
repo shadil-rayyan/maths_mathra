@@ -87,12 +87,14 @@ public class NumberLineView extends View {
 
     public int moveLeft() {
         currentPosition--;
+        NumberLineValues.setCurrentPosition(currentPosition);
         invalidate();
         return currentPosition;
     }
 
     public int moveRight() {
         currentPosition++;
+        NumberLineValues.setCurrentPosition(currentPosition);
         invalidate();
         return currentPosition;
     }

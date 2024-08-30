@@ -1,5 +1,6 @@
 package com.zendalona.mathmantra.ui;
 
+import android.app.ActionBar;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 
@@ -36,16 +37,14 @@ public class NumberLineFragment extends Fragment {
         super.onResume();
         // Lock orientation to landscape when this fragment is visible
         requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        NumberLineValues.setNumberLineStart(-6);
-        NumberLineValues.setCurrentPosition(0);
-        NumberLineValues.setNumberLineEnd(6);
-//        requireActivity().getActionBar().setTitle("Number Line");
+        ActionBar actionBar = requireActivity().getActionBar();
+        if(actionBar != null) actionBar.setTitle("Number Line");
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+        requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
     @Override
@@ -53,46 +52,44 @@ public class NumberLineFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentNumberLineBinding.inflate(inflater, container, false);
+
+        NumberLineValues.setNumberLineStart(-5);
+        NumberLineValues.setCurrentPosition(0);
+        NumberLineValues.setNumberLineEnd(5);
+        binding.numberLineView.reDrawNumberLine();
+        binding.currentPositionTv.setText(CURRENT_POSITION + NumberLineValues.getCurrentPosition());
+
         binding.btnLeft.setOnClickListener(v -> moveCharacter(Direction.LEFT));
         binding.btnRight.setOnClickListener(v -> moveCharacter(Direction.RIGHT));
         return binding.getRoot();
     }
 
     private void moveCharacter(Direction direction) {
-        int startPosition = binding.numberLineView.getNumberRangeStart();
-        int endPosition = binding.numberLineView.getNumberRangeEnd();
+        int startPosition = NumberLineValues.getNumberLineStart();
+        int endPosition = NumberLineValues.getNumberLineEnd();
         int currentPosition = NumberLineValues.getCurrentPosition();
-        switch(direction){
-            case LEFT : {
-                currentPosition = binding.numberLineView.moveLeft();
-                NumberLineValues.setCurrentPosition(currentPosition);
-                NumberLineValues.setNumberLineEnd(currentPosition);
-                NumberLineValues.setNumberLineStart(currentPosition - 12);
-                break;
-            }
-            case RIGHT : {
-                currentPosition = binding.numberLineView.moveRight();
-                NumberLineValues.setNumberLineEnd(currentPosition - 12);
-                NumberLineValues.setNumberLineStart(currentPosition);
-                NumberLineValues.setCurrentPosition(currentPosition);
-                break;
-            }
-            default : currentPosition = 0;
-        }
-        binding.currentPositionTv.setText(CURRENT_POSITION + currentPosition);
-        tts.speak(Integer.toString(currentPosition));
-        Log.d("Start : ", String.valueOf(NumberLineValues.getNumberLineStart()));
-        Log.d("Current : ", String.valueOf(NumberLineValues.getCurrentPosition()));
-        Log.d("End : ", String.valueOf(NumberLineValues.getNumberLineEnd()));
 
-        if(NumberLineValues.getCurrentPosition() == NumberLineValues.getNumberLineEnd()
-        || NumberLineValues.getCurrentPosition() == NumberLineValues.getNumberLineStart()){
-            // scroll number line
-            Log.d("setNumberRange() called w/ params","," );
+        Log.d("moveCharacter() : Starting : ", String.valueOf(startPosition));
+        Log.d("moveCharacter() : CurrentPosition : ", String.valueOf(currentPosition));
+        Log.d("moveCharacter() : Ending : ", String.valueOf(endPosition));
+
+        if(currentPosition < endPosition && currentPosition > startPosition){
+            switch (direction){
+                case LEFT:
+                    NumberLineValues.setCurrentPosition(binding.numberLineView.moveLeft());
+                    break;
+                case RIGHT:
+                    NumberLineValues.setCurrentPosition(binding.numberLineView.moveRight());
+                    break;
+                default: Log.d("Number Line", "Direction Unknown!");
+            }
+        }
+        else {
+            // TODO : redraw number line with current position as start/end position
             binding.numberLineView.reDrawNumberLine();
         }
+        tts.speak(Integer.toString(currentPosition));
+        binding.currentPositionTv.setText(CURRENT_POSITION + currentPosition);
 
     }
-
-
 }

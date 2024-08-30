@@ -6,13 +6,18 @@ public class NumberLineValues {
     private static int CURRENT_POSITION;
 
 
+    public static void reset(){
+        NumberLineValues.LINE_START = -5;
+        NumberLineValues.LINE_END = 5;
+        NumberLineValues.CURRENT_POSITION = 0;
+
+    }
+
     public static int getNumberLineStart() {
         return LINE_START;
     }
 
-    public static void setNumberLineStart(int LINE_START) {
-        NumberLineValues.LINE_START = LINE_START;
-    }
+    public static void setNumberLineStart(int LINE_START) {NumberLineValues.LINE_START = LINE_START;}
 
     public static int getNumberLineEnd() {
         return LINE_END;
@@ -26,7 +31,5 @@ public class NumberLineValues {
         return CURRENT_POSITION;
     }
 
-    public static void setCurrentPosition(int currentPosition) {
-        CURRENT_POSITION = currentPosition;
-    }
+    public static void setCurrentPosition(int currentPosition) {CURRENT_POSITION = currentPosition;}
 }
