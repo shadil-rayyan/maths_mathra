@@ -4,17 +4,9 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.util.Log;
-import android.widget.Toast;
-
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 public class PermissionManager {
     public static final int REQUEST_CODE_MICROPHONE = 100;

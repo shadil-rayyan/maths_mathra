@@ -9,7 +9,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
-import android.widget.Toast;
+import android.util.Log;
 
 import com.zendalona.mathmantra.databinding.ActivityMainBinding;
 import com.zendalona.mathmantra.ui.DashboardFragment;
@@ -44,11 +44,11 @@ public class MainActivity extends AppCompatActivity implements FragmentNavigatio
         permissionManager = new PermissionManager(this, new PermissionManager.PermissionCallback() {
             @Override
             public void onPermissionGranted() {
-                Toast.makeText(MainActivity.this, "Permission Granted", Toast.LENGTH_SHORT).show();
+                Log.d("PermissionManager.PermissionCallback", "Granted!");
             }
             @Override
             public void onPermissionDenied() {
-                Toast.makeText(MainActivity.this, "Permission Denied", Toast.LENGTH_SHORT).show();
+                Log.w("PermissionManager.PermissionCallback", "Denied!");
             }
         });
         // TODO : ask for the sensor permissions

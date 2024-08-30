@@ -9,9 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import com.zendalona.mathmantra.R;
 import com.zendalona.mathmantra.databinding.FragmentNumberLineBinding;
 import com.zendalona.mathmantra.enums.Direction;
 import com.zendalona.mathmantra.utils.NumberLineValues;

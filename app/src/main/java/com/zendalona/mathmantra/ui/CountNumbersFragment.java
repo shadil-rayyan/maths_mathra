@@ -9,8 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
@@ -48,7 +46,6 @@ public class CountNumbersFragment extends Fragment {
         permissionManager = new PermissionManager(requireActivity(), new PermissionManager.PermissionCallback() {
             @Override
             public void onPermissionGranted() {
-                Toast.makeText(getContext(), "Permission Granted", Toast.LENGTH_SHORT).show();
                 // Initialize SpeechRecognitionUtility iff permission is granted
                 speechRecognitionUtil = new SpeechRecognitionUtility(requireActivity(), new SpeechRecognitionUtility.SpeechRecognitionCallback() {
                     @Override
@@ -65,14 +62,13 @@ public class CountNumbersFragment extends Fragment {
                         showResultDialog(isCorrect);
                         Log.d("Recite Numbers : spoken:-", spokenText);
                         Log.d("Recite Numbers : answerFormed:-", answer);
-//                       Toast.makeText(requireActivity(),"CountNumbers.java : Heard :- " + spokenText, Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void onError(int error) {
                         binding.micAnimationView.pauseAnimation();
                         Toast.makeText(requireActivity(),"Error counting" + error, Toast.LENGTH_SHORT).show();
-                        Log.e("CountNumbers : Err : -", String.valueOf(error));
+                        Log.e("Error in speech recognition : ", String.valueOf(error));
                     }
                 });
             }
@@ -102,7 +98,9 @@ public class CountNumbersFragment extends Fragment {
         int[] range = random.generateNumberRangeForCount(COUNT_RANGE);
         int start = range[0];
         int end = range[1];
-        binding.countFromRangeTv.setText("Count from " + start + " to " + end);
+        String message = "Count from " + start + " to " + end;
+        binding.countFromRangeTv.setText(message);
+        tts.speak(message);
         for (int i = start; i <= end; i++) {
             correctSequence.add(i);
             answer.append(i);
