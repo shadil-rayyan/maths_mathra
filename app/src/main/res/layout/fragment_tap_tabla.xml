@@ -31,6 +31,7 @@
             android:layout_marginTop="48dp"
             android:clickable="true"
             android:focusable="true"
+            android:contentDescription="Double tap to play drums"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.503"
             app:layout_constraintStart_toStartOf="parent"
@@ -48,6 +49,7 @@
             android:focusable="false"
             android:text="Tap to play!"
             android:textSize="48sp"
+            android:textAlignment="center"
             app:layout_constraintBottom_toTopOf="@+id/mole_up_siv"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

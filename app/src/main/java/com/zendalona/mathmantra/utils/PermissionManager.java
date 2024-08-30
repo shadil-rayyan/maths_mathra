@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,6 +23,7 @@ public class PermissionManager {
     private final Activity activity;
     private final PermissionCallback callback;
     private String permissionToRequest;
+    private final String TAG = "PermissionManager";
 
     public PermissionManager(Activity activity, PermissionCallback callback) {
         this.activity = activity;
@@ -30,11 +32,13 @@ public class PermissionManager {
 
     public void requestMicrophonePermission() {
         permissionToRequest = Manifest.permission.RECORD_AUDIO;
+        Log.i(TAG + " :: requestMicrophonePermission()", permissionToRequest);
         requestPermission();
     }
 
     public void requestAccelerometerPermission() {
         permissionToRequest = Manifest.permission.BODY_SENSORS;
+        Log.i(TAG + " :: requestAccelerometerPermission()", permissionToRequest);
         requestPermission();
     }
 
@@ -50,10 +54,15 @@ public class PermissionManager {
         if (permissionToRequest != null) {
             if (ContextCompat.checkSelfPermission(activity, permissionToRequest) == PackageManager.PERMISSION_GRANTED) {
                 if (callback != null) callback.onPermissionGranted();
-            } else
-                ActivityCompat.requestPermissions(activity, new String[]{permissionToRequest}, getRequestCode());
+            } else {
+                Log.w(TAG  + " :: requestPermission()", "Permission not already granted. " + permissionToRequest + "w/" + getRequestCode());
+                String[] permissionsToRequest = {Manifest.permission.RECORD_AUDIO, Manifest.permission.BODY_SENSORS};
+                Log.i(TAG, "requesting permissions : " + Arrays.toString(permissionsToRequest));
+                ActivityCompat.requestPermissions(activity, permissionsToRequest, 100);
+//                ActivityCompat.requestPermissions(activity, new String[]{permissionToRequest}, 42);
+            }
         }
-        else Log.e("PermissionManager.java :: requestPermission()", "permissionToRequest value is null");
+        else Log.e(TAG + " :: requestPermission()", "permissionToRequest value is null");
     }
 
     public void handlePermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
@@ -61,7 +70,7 @@ public class PermissionManager {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) callback.onPermissionGranted();
              else callback.onPermissionDenied();
         }
-        else Log.w("PermissionManager.java :: handlePermissionsResult() ","callback value is null");
+        else Log.w(TAG + " :: handlePermissionsResult() ","callback value is null");
     }
 
     public interface PermissionCallback {

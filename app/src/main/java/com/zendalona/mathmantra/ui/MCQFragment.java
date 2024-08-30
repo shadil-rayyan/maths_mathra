@@ -19,7 +19,10 @@ import com.zendalona.mathmantra.utils.RandomValueGenerator;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 
 public class MCQFragment extends Fragment {
 
@@ -45,10 +48,27 @@ public class MCQFragment extends Fragment {
     }
 
     private void generateNewQuestion() {
-        int[] numbers = random.generateAdditionValues(Difficulty.EASY);
+        int topic = random.generateQuestionTopic();
+        int[] numbers;
+        String operator = "+";
+        switch (topic){
+            case 1 :
+                numbers = random.generateSubtractionValues(Difficulty.EASY);
+                operator = "-";
+                break;
+            case 2 :
+                numbers = random.generateMultiplicationValues(Difficulty.EASY);
+                operator = "*";
+                break;
+            case 3 :
+                numbers = random.generateDivisionValues(Difficulty.EASY);
+                operator = "/";
+                break;
+            default: numbers = random.generateAdditionValues(Difficulty.EASY);
+        }
         StringBuilder questionBuilder = new StringBuilder();
         questionBuilder.append(numbers[0])
-                .append("+")
+                .append(operator)
                 .append(numbers[1])
                 .append(" = ?");
         binding.questionTv.setText(questionBuilder);
@@ -73,8 +93,6 @@ public class MCQFragment extends Fragment {
                 .setOnClickListener(v -> showResultDialog(Integer.parseInt(binding.optionC.getText().toString()) == numbers[2]));
         binding.optionD
                 .setOnClickListener(v -> showResultDialog(Integer.parseInt(binding.optionD.getText().toString()) == numbers[2]));
-
-
     }
 
     private void showResultDialog(boolean isCorrect) {
@@ -95,7 +113,7 @@ public class MCQFragment extends Fragment {
 
         new AlertDialog.Builder(requireContext())
                 .setView(dialogView)
-                .setPositiveButton("OK", (dialog, which) -> {
+                .setPositiveButton("Continue", (dialog, which) -> {
                     dialog.dismiss();
                     generateNewQuestion();
                 })

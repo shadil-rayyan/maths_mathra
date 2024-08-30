@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements FragmentNavigatio
         });
         // TODO : ask for the sensor permissions
         permissionManager.requestMicrophonePermission();
-        permissionManager.requestAccelerometerPermission();
+//        permissionManager.requestAccelerometerPermission();
     }
 
     @Override
@@ -73,6 +73,7 @@ public class MainActivity extends AppCompatActivity implements FragmentNavigatio
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.setTransition(transition);
         fragmentTransaction.replace(binding.fragmentContainer.getId(), fragment);
+        // TODO : binding.toolbar.setTitle();
         fragmentTransaction.commit();
     }
 

@@ -20,6 +20,8 @@
             android:layout_marginTop="25dp"
             android:layout_marginEnd="25dp"
             android:text="0"
+            android:focusable="false"
+            android:clickable="false"
             android:textSize="48sp"/>
 
         <com.airbnb.lottie.LottieAnimationView
@@ -27,8 +29,6 @@
             android:layout_width="250dp"
             android:layout_height="250dp"
             android:layout_marginTop="50dp"
-            android:clickable="true"
-            android:focusable="true"
             app:layout_constraintBottom_toTopOf="@+id/ring_me_tv"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -45,6 +45,7 @@
             android:clickable="false"
             android:focusable="false"
             android:text="Wiggle to Ring!"
+            android:textAlignment="center"
             android:textSize="48sp"
             app:layout_constraintBottom_toTopOf="@+id/mole_up_siv"
             app:layout_constraintEnd_toEndOf="parent"

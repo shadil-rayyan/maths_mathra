@@ -6,17 +6,18 @@ import java.util.Random;
 
 public class RandomValueGenerator {
     private Random random;
+    private final int NO_OF_TOPICS = 4;
 
     public RandomValueGenerator() {
         this.random = new Random();
     }
 
-    public int generateNumberForBellRing() {
-        return random.nextInt(16);
+    public int generateQuestionTopic(){
+        return random.nextInt(NO_OF_TOPICS);
     }
 
-    public int generateNumberForDrumBeats() {
-        return random.nextInt(50 + 1);
+    public int generateNumberForCountGame() {
+        return random.nextInt(16);
     }
 
     public int[] generateAdditionValues(Difficulty difficulty) {
@@ -40,7 +41,7 @@ public class RandomValueGenerator {
     }
 
     public int[] generateSubtractionValues(Difficulty difficulty) {
-        int[] values = new int[2];
+        int[] values = new int[3];
         switch (difficulty) {
             case EASY:
                 values[0] = random.nextInt(10) + 1;
@@ -70,11 +71,12 @@ public class RandomValueGenerator {
                 }
                 break;
         }
+        values[2] = values[0] - values[1];
         return values;
     }
 
     public int[] generateMultiplicationValues(Difficulty difficulty) {
-        int[] values = new int[2];
+        int[] values = new int[3];
         switch (difficulty) {
             case EASY:
                 values[0] = random.nextInt(10) + 1;
@@ -89,6 +91,7 @@ public class RandomValueGenerator {
                 values[1] = random.nextInt(50) + 1;
                 break;
         }
+        values[2] = values[0] * values[1];
         return values;
     }
 
