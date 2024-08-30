@@ -23,9 +23,8 @@
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/mic_animation_view"
-            android:layout_width="250dp"
-            android:layout_height="250dp"
-            android:layout_marginTop="50dp"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
             android:clickable="false"
             android:focusable="false"
             app:lottie_autoPlay="false"
@@ -37,8 +36,10 @@
             android:id="@+id/startListeningButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
             android:text="Start Counting"
-            android:textSize="36sp"/>
+            android:padding="32dp"
+            android:textSize="48sp"/>
     </LinearLayout>
 
 

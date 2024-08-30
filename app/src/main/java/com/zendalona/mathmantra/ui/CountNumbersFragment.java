@@ -24,6 +24,7 @@ import com.zendalona.mathmantra.utils.TTSUtility;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CountNumbersFragment extends Fragment {
 
@@ -54,7 +55,14 @@ public class CountNumbersFragment extends Fragment {
                     public void onResults(String spokenText) {
                         binding.micAnimationView.pauseAnimation();
                         String normalizedSpokenText = spokenText.replaceAll("\\s+", "");
-                        showResultDialog(normalizedSpokenText.equalsIgnoreCase(answer));
+                        boolean isCorrect = normalizedSpokenText.equalsIgnoreCase(answer);
+
+                        if(!isCorrect) {
+                            //tts.speak("You missed");
+                            List<String> missingNumbers = correctSequence.stream().map(String::valueOf).collect(Collectors.toList());
+                            //TODO : missingNumbers.removeAll(spokenNumbers);
+                        }
+                        showResultDialog(isCorrect);
                         Log.d("Recite Numbers : spoken:-", spokenText);
                         Log.d("Recite Numbers : answerFormed:-", answer);
 //                       Toast.makeText(requireActivity(),"CountNumbers.java : Heard :- " + spokenText, Toast.LENGTH_SHORT).show();
@@ -68,7 +76,6 @@ public class CountNumbersFragment extends Fragment {
                     }
                 });
             }
-
 
             @Override
             public void onPermissionDenied() {

@@ -22,7 +22,7 @@ public class RandomValueGenerator {
 
     public int[] generateNumberRangeForCount(int upperBound){
         int start = random.nextInt(upperBound - 10);
-        int end = random.nextInt(11) + start + 1;
+        int end = random.nextInt(11) + start + 6;
         return new int[]{start, end};
     }
 
