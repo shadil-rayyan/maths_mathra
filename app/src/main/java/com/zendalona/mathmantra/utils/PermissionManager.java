@@ -1,60 +1,67 @@
 package com.zendalona.mathmantra.utils;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class PermissionManager {
     public static final int REQUEST_CODE_MICROPHONE = 100;
     public static final int REQUEST_CODE_ACCELEROMETER = 101;
 
-    private Activity activity;
-    private PermissionCallback callback;
-
-    private ActivityResultLauncher<String> permissionLauncher;
+    private final Activity activity;
+    private final PermissionCallback callback;
+    private String permissionToRequest;
 
     public PermissionManager(Activity activity, PermissionCallback callback) {
         this.activity = activity;
         this.callback = callback;
-//        initializePermissionLauncher();
     }
 
-    /*private void initializePermissionLauncher() {
-        permissionLauncher = activity.registerForActivityResult(
-                new ActivityResultContracts.RequestPermission(),
-                isGranted -> {
-                    if (callback != null) {
-                        if (isGranted) {
-                            callback.onPermissionGranted();
-                        } else {
-                            callback.onPermissionDenied();
-                        }
-                    }
-                }
-        );
-    }*/
-
     public void requestMicrophonePermission() {
-        requestPermission(android.Manifest.permission.RECORD_AUDIO);
+        permissionToRequest = Manifest.permission.RECORD_AUDIO;
+        requestPermission();
     }
 
     public void requestAccelerometerPermission() {
-        requestPermission(android.Manifest.permission.BODY_SENSORS);
+        permissionToRequest = Manifest.permission.BODY_SENSORS;
+        requestPermission();
     }
 
-    private void requestPermission(String permission) {
-        if (ContextCompat.checkSelfPermission(activity, permission) == PackageManager.PERMISSION_GRANTED) {
-            if (callback != null) {
-                callback.onPermissionGranted();
-            }
-        } else {
-            permissionLauncher.launch(permission);
+    private int getRequestCode() {
+        switch (permissionToRequest){
+            case Manifest.permission.RECORD_AUDIO: return REQUEST_CODE_MICROPHONE;
+            case Manifest.permission.BODY_SENSORS: return REQUEST_CODE_ACCELEROMETER;
+            default: Log.e("PermissionManager", "Unknown permission: " + permissionToRequest); return -1;
         }
+    }
+
+    private void requestPermission() {
+        if (permissionToRequest != null) {
+            if (ContextCompat.checkSelfPermission(activity, permissionToRequest) == PackageManager.PERMISSION_GRANTED) {
+                if (callback != null) callback.onPermissionGranted();
+            } else
+                ActivityCompat.requestPermissions(activity, new String[]{permissionToRequest}, getRequestCode());
+        }
+        else Log.e("PermissionManager.java :: requestPermission()", "permissionToRequest value is null");
+    }
+
+    public void handlePermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if(callback != null) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) callback.onPermissionGranted();
+             else callback.onPermissionDenied();
+        }
+        else Log.w("PermissionManager.java :: handlePermissionsResult() ","callback value is null");
     }
 
     public interface PermissionCallback {

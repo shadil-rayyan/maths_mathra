@@ -1,9 +1,12 @@
 package com.zendalona.mathmantra.ui;
 
 import android.os.Bundle;
+import android.speech.RecognitionListener;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,31 +29,53 @@ public class CountNumbersFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment using View Binding
         binding = FragmentCountNumbersBinding.inflate(inflater, container, false);
-        View view = binding.getRoot();
 
         // Initialize the correct sequence and other variables
         correctSequence = new ArrayList<>();
-        for (int i = 1; i <= 10; i++) {
-            correctSequence.add(i);
-        }
+        for (int i = 1; i <= 10; i++) correctSequence.add(i);
         currentIndex = 0;
 
-        // Initialize PermissionManager and request microphone permission
-//        permissionManager = new PermissionManager(requireActivity());
-//        permissionManager.requestMicrophonePermission();
+        // Initialize PermissionManager
+        permissionManager = new PermissionManager(requireActivity(), new PermissionManager.PermissionCallback() {
+            @Override
+            public void onPermissionGranted() {
+                Toast.makeText(getContext(), "Permission Granted", Toast.LENGTH_SHORT).show();
+                // Initialize SpeechRecognitionUtility iff permission is granted
 
-        // Initialize SpeechRecognitionUtility
-//        speechRecognitionUtil = new SpeechRecognitionUtility(getContext(), speechRecognitionListener);
+                speechRecognitionUtil = new SpeechRecognitionUtility(requireActivity(), new SpeechRecognitionUtility.SpeechRecognitionCallback() {
+                    @Override
+                    public void onResults(String spokenText) {
+                        Toast.makeText(requireActivity(),"CountNumbers.java : Heard :- " + spokenText, Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onError(int error) {
+                        Toast.makeText(requireActivity(),"CountNumbers.java : Err :- " + error, Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+            }
+
+
+            @Override
+            public void onPermissionDenied() {
+                Toast.makeText(getContext(), "Permission Denied", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        permissionManager.requestMicrophonePermission();
 
         // Set up button listener to start listening
         binding.startListeningButton.setOnClickListener(v -> {
-            currentIndex = 0;
-            speechRecognitionUtil.startListening();
+            if(speechRecognitionUtil != null) {
+                currentIndex = 0;
+                speechRecognitionUtil.startListening();
+            }
+            else Log.d("CountNumbers :: startListeningBtnClicked", "speechRecognitionUtil value is null!");
         });
 
-        return view;
+        return binding.getRoot();
     }
 
     @Override
@@ -60,91 +85,6 @@ public class CountNumbersFragment extends Fragment {
         binding = null;
     }
 
-    // Handle permission result
-/*    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        permissionManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    }
 
-    // Speech recognition listener implementation
-    private final SpeechRecognitionUtility.SpeechRecognitionListener speechRecognitionListener = new SpeechRecognitionUtility.SpeechRecognitionListener() {
-        @Override
-        public void onReadyForSpeech(Bundle params) {
-            // Inform the user that the system is ready for speech input
-        }
 
-        @Override
-        public void onBeginningOfSpeech() {
-            // Indicate the beginning of speech input
-        }
-
-        @Override
-        public void onRmsChanged(float rmsdB) {
-            // Handle changes in the input volume
-        }
-
-        @Override
-        public void onBufferReceived(byte[] buffer) {
-            // Handle additional data from the speech recognition buffer
-        }
-
-        @Override
-        public void onEndOfSpeech() {
-            // Handle the end of speech input
-        }
-
-        @Override
-        public void onError(int error) {
-            // Handle errors during recognition
-            // Consider adding error handling or informing the user
-        }
-
-        @Override
-        public void onResults(Bundle results) {
-            ArrayList<String> matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
-            if (matches != null && !matches.isEmpty()) {
-                String spokenText = matches.get(0).toLowerCase().trim();
-                validateCounting(spokenText);
-            }
-        }
-
-        @Override
-        public void onPartialResults(Bundle partialResults) {
-            // Handle partial results if necessary
-        }
-
-        @Override
-        public void onEvent(int eventType, Bundle params) {
-            // Handle additional events
-        }
-    };
-
-    private void validateCounting(String spokenText) {
-        String[] words = spokenText.split("\\s+");
-        for (String word : words) {
-            try {
-                int number = Integer.parseInt(word);
-                if (number == correctSequence.get(currentIndex)) {
-                    currentIndex++;
-                    if (currentIndex == correctSequence.size()) {
-                        binding.promptTextView.setText("Well done! You've counted to 10.");
-                        speechRecognitionUtil.stopListening();
-                        return;
-                    }
-                } else {
-                    binding.promptTextView.setText("Please start from 1 again.");
-                    currentIndex = 0;
-                    break;
-                }
-            } catch (NumberFormatException e) {
-                // Handle non-integer spoken words
-                binding.promptTextView.setText("Please use numbers to count.");
-                break;
-            }
-        }
-        if (currentIndex < correctSequence.size()) {
-            speechRecognitionUtil.startListening();
-        }
-    }*/
 }
