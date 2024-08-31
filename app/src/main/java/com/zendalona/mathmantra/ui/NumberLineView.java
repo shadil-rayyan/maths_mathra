@@ -8,17 +8,18 @@ import android.util.Log;
 import android.view.View;
 import androidx.core.content.ContextCompat;
 import com.zendalona.mathmantra.R;
-import com.zendalona.mathmantra.utils.NumberLineValues;
 
 public class NumberLineView extends View {
 
-    private int currentPosition; // Start position of the mascot
+    private int currentPosition;
+    private int numberRangeStart;
+    private int numberRangeEnd;
+    private final String MASCOT_EMOJI = "\uD83E\uDDCD\u200D♂\uFE0F";
+
     private Paint linePaint;
     private Paint numberPaint;
     private Paint mascotPaint;
 
-    private int numberRangeStart = NumberLineValues.getNumberLineStart();
-    private int numberRangeEnd = NumberLineValues.getNumberLineEnd();
     private float gap;
 
     public NumberLineView(Context context) {
@@ -37,19 +38,16 @@ public class NumberLineView extends View {
     }
 
     private void init() {
-        currentPosition = NumberLineValues.getCurrentPosition();
         linePaint = new Paint();
-        int lineColor = ContextCompat.getColor(getContext(), R.color.blue);
-        linePaint.setColor(lineColor);
+        linePaint.setColor(ContextCompat.getColor(getContext(), R.color.blue));
         linePaint.setStrokeWidth(12f);
 
-        numberPaint = new Paint(); // Initialize Paint for numbers
-        int numberColor = ContextCompat.getColor(getContext(), R.color.lightBlue);
-        numberPaint.setColor(numberColor);
+        numberPaint = new Paint();
+        numberPaint.setColor(ContextCompat.getColor(getContext(), R.color.lightBlue));
         numberPaint.setTextSize(40f);
 
-        mascotPaint = new Paint(); // Paint for the mascot (emoji)
-        mascotPaint.setTextSize(200f); // Larger size for the mascot
+        mascotPaint = new Paint();
+        mascotPaint.setTextSize(200f);
     }
 
     @Override
@@ -66,10 +64,10 @@ public class NumberLineView extends View {
 
         canvas.drawLine(0 , centerY, getWidth(), centerY, linePaint);
 
-        gap = (endX - startX) / (numberRangeEnd - numberRangeStart );
+        gap = (endX - startX) / (numberRangeEnd - numberRangeStart);
 
         // Draw numbers on the number line
-        Log.d("Drawing number line from : ", numberRangeStart + "<->" + numberRangeEnd);
+        Log.d("Drawing number line range : ", numberRangeStart + " to " + numberRangeEnd);
         for (int number = numberRangeStart; number <= numberRangeEnd; number++) {
             float x = startX + (number - numberRangeStart) * gap;
             canvas.drawText(String.valueOf(number), x, centerY + 50f, numberPaint);
@@ -78,11 +76,17 @@ public class NumberLineView extends View {
 
     private void drawMascot(Canvas canvas) {
         float centerY = getHeight() / 2f;
+        float mascotPosition = (currentPosition - numberRangeStart - 0.4f) * gap;
+        if (mascotPosition < 0) mascotPosition = 0;
+        if (mascotPosition > getWidth()) mascotPosition = getWidth();
+        canvas.drawText(MASCOT_EMOJI, mascotPosition , centerY - 50f, mascotPaint);
+    }
 
-        gap = (float) getWidth() / (numberRangeEnd - numberRangeStart - 1);
-        float mascotPosition = (currentPosition - numberRangeStart - 1) * gap;
-//        float mascotPosition = -4;
-        canvas.drawText("\uD83E\uDDCD\u200D♂\uFE0F", mascotPosition , centerY - 50f, mascotPaint);
+    public void updateNumberLine(int start, int end, int position) {
+        this.numberRangeStart = start;
+        this.numberRangeEnd = end;
+        this.currentPosition = position;
+        invalidate();
     }
 
     public int moveLeft() {
@@ -97,16 +101,4 @@ public class NumberLineView extends View {
         return currentPosition;
     }
 
-    public void reDrawNumberLine(){
-        Log.d("Redrawing number line","tadaaa");
-        invalidate(); // redraw number line
-    }
-
-    public int getNumberRangeStart(){
-        return this.numberRangeStart;
-    }
-
-    public int getNumberRangeEnd() {
-        return this.numberRangeEnd;
-    }
 }
