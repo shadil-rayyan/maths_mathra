@@ -8,13 +8,13 @@ import android.util.Log;
 import android.view.View;
 import androidx.core.content.ContextCompat;
 import com.zendalona.mathmantra.R;
-import com.zendalona.mathmantra.utils.NumberLineValues;
 
 public class NumberLineView extends View {
 
     private int currentPosition;
     private int numberRangeStart;
     private int numberRangeEnd;
+    private final String MASCOT_EMOJI = "\uD83E\uDDCD\u200D♂\uFE0F";
 
     private Paint linePaint;
     private Paint numberPaint;
@@ -76,10 +76,10 @@ public class NumberLineView extends View {
 
     private void drawMascot(Canvas canvas) {
         float centerY = getHeight() / 2f;
-        float mascotPosition = (currentPosition - numberRangeStart) * gap;
+        float mascotPosition = (currentPosition - numberRangeStart - 0.4f) * gap;
         if (mascotPosition < 0) mascotPosition = 0;
         if (mascotPosition > getWidth()) mascotPosition = getWidth();
-        canvas.drawText("\uD83E\uDDCD\u200D♂\uFE0F", mascotPosition , centerY - 50f, mascotPaint);
+        canvas.drawText(MASCOT_EMOJI, mascotPosition , centerY - 50f, mascotPaint);
     }
 
     public void updateNumberLine(int start, int end, int position) {

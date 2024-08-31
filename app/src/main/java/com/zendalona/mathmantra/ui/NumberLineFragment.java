@@ -52,8 +52,14 @@ public class NumberLineFragment extends Fragment {
 
         setupObservers();
 
-        binding.btnLeft.setOnClickListener(v -> viewModel.moveLeft());
-        binding.btnRight.setOnClickListener(v -> viewModel.moveRight());
+        binding.btnLeft.setOnClickListener(v -> {
+            viewModel.moveLeft();
+            binding.numberLineView.moveLeft();
+        });
+        binding.btnRight.setOnClickListener(v -> {
+            viewModel.moveRight();
+            binding.numberLineView.moveRight();
+        });
 
         return binding.getRoot();
     }
