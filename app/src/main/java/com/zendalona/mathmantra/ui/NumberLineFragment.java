@@ -1,24 +1,23 @@
 package com.zendalona.mathmantra.ui;
 
-import android.app.ActionBar;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.zendalona.mathmantra.databinding.FragmentNumberLineBinding;
-import com.zendalona.mathmantra.enums.Direction;
-import com.zendalona.mathmantra.utils.NumberLineValues;
 import com.zendalona.mathmantra.utils.TTSUtility;
+import com.zendalona.mathmantra.viewModels.NumberLineViewModel;
 
 public class NumberLineFragment extends Fragment {
 
     private FragmentNumberLineBinding binding;
+    private NumberLineViewModel viewModel;
     private TTSUtility tts;
     private final String CURRENT_POSITION = "You're standing on number : \n";
 
@@ -28,6 +27,7 @@ public class NumberLineFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        viewModel = new ViewModelProvider(this).get(NumberLineViewModel.class);
         tts = new TTSUtility(requireContext());
         tts.setSpeechRate(1.25f);
     }
@@ -37,8 +37,6 @@ public class NumberLineFragment extends Fragment {
         super.onResume();
         // Lock orientation to landscape when this fragment is visible
         requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        ActionBar actionBar = requireActivity().getActionBar();
-        if(actionBar != null) actionBar.setTitle("Number Line");
     }
 
     @Override
@@ -48,48 +46,33 @@ public class NumberLineFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentNumberLineBinding.inflate(inflater, container, false);
 
-        NumberLineValues.setNumberLineStart(-5);
-        NumberLineValues.setCurrentPosition(0);
-        NumberLineValues.setNumberLineEnd(5);
-        binding.numberLineView.reDrawNumberLine();
-        binding.currentPositionTv.setText(CURRENT_POSITION + NumberLineValues.getCurrentPosition());
+        viewModel.getCurrentPosition().observe(getViewLifecycleOwner(), position -> {
+            updateNumberLine();
+            tts.speak(CURRENT_POSITION + position);
+            binding.currentPositionTv.setText(CURRENT_POSITION + position);
+        });
 
-        binding.btnLeft.setOnClickListener(v -> moveCharacter(Direction.LEFT));
-        binding.btnRight.setOnClickListener(v -> moveCharacter(Direction.RIGHT));
+        binding.btnLeft.setOnClickListener(v -> viewModel.moveLeft());
+        binding.btnRight.setOnClickListener(v -> viewModel.moveRight());
+
+        updateNumberLine();
+
         return binding.getRoot();
     }
 
-    private void moveCharacter(Direction direction) {
-        int startPosition = NumberLineValues.getNumberLineStart();
-        int endPosition = NumberLineValues.getNumberLineEnd();
-        int currentPosition = NumberLineValues.getCurrentPosition();
+    private void updateNumberLine() {
+        int start = viewModel.getNumberLineStart().getValue();
+        int end = viewModel.getNumberLineEnd().getValue();
+        int position = viewModel.getCurrentPosition().getValue();
+        binding.numberLineView.updateNumberLine(start, end, position);
+    }
 
-        Log.d("moveCharacter() : Starting : ", String.valueOf(startPosition));
-        Log.d("moveCharacter() : CurrentPosition : ", String.valueOf(currentPosition));
-        Log.d("moveCharacter() : Ending : ", String.valueOf(endPosition));
-
-        if(currentPosition < endPosition && currentPosition > startPosition){
-            switch (direction){
-                case LEFT:
-                    NumberLineValues.setCurrentPosition(binding.numberLineView.moveLeft());
-                    break;
-                case RIGHT:
-                    NumberLineValues.setCurrentPosition(binding.numberLineView.moveRight());
-                    break;
-                default: Log.d("Number Line", "Direction Unknown!");
-            }
-        }
-        else {
-            // TODO : redraw number line with current position as start/end position
-            binding.numberLineView.reDrawNumberLine();
-        }
-        tts.speak(Integer.toString(currentPosition));
-        binding.currentPositionTv.setText(CURRENT_POSITION + currentPosition);
-
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 }
