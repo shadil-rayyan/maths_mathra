@@ -44,7 +44,7 @@ public class DashboardFragment extends Fragment {
             if (navigationListener != null) navigationListener.loadFragment(new CountNumbersFragment(),FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         });
         binding.ttsCv.setOnClickListener(v -> {
-            if (navigationListener != null) navigationListener.loadFragment(new NarratorFragment(),FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+            if (navigationListener != null) navigationListener.loadFragment(new ChooseLessonFragment(),FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         });
         binding.mcqCv.setOnClickListener(v -> {
             if (navigationListener != null) navigationListener.loadFragment(new MCQFragment(),FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
