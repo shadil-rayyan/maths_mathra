@@ -37,6 +37,7 @@ public class NumberLineFragment extends Fragment {
         super.onResume();
         // Lock orientation to landscape when this fragment is visible
         requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        viewModel.reset();
     }
 
     @Override
@@ -49,26 +50,33 @@ public class NumberLineFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentNumberLineBinding.inflate(inflater, container, false);
 
-        viewModel.getCurrentPosition().observe(getViewLifecycleOwner(), position -> {
-            updateNumberLine();
-            tts.speak(CURRENT_POSITION + position);
-            binding.currentPositionTv.setText(CURRENT_POSITION + position);
-        });
+        setupObservers();
 
         binding.btnLeft.setOnClickListener(v -> viewModel.moveLeft());
         binding.btnRight.setOnClickListener(v -> viewModel.moveRight());
 
-        updateNumberLine();
-
         return binding.getRoot();
     }
 
-    private void updateNumberLine() {
-        int start = viewModel.getNumberLineStart().getValue();
-        int end = viewModel.getNumberLineEnd().getValue();
-        int position = viewModel.getCurrentPosition().getValue();
-        binding.numberLineView.updateNumberLine(start, end, position);
+    private void setupObservers() {
+        viewModel.lineStart.observe(getViewLifecycleOwner(), start -> {
+            int end = viewModel.lineEnd.getValue() != null ? viewModel.lineEnd.getValue() : start + 10;
+            int position = viewModel.currentPosition.getValue() != null ? viewModel.currentPosition.getValue() : start;
+            binding.numberLineView.updateNumberLine(start, end, position);
+        });
+
+        viewModel.lineEnd.observe(getViewLifecycleOwner(), end -> {
+            int start = viewModel.lineStart.getValue() != null ? viewModel.lineStart.getValue() : end - 10;
+            int position = viewModel.currentPosition.getValue() != null ? viewModel.currentPosition.getValue() : start;
+            binding.numberLineView.updateNumberLine(start, end, position);
+        });
+
+        viewModel.currentPosition.observe(getViewLifecycleOwner(), position -> {
+            binding.currentPositionTv.setText(CURRENT_POSITION + position);
+            tts.speak(Integer.toString(position));
+        });
     }
+
 
     @Override
     public void onDestroyView() {

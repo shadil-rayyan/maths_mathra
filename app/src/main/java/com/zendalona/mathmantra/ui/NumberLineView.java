@@ -76,8 +76,9 @@ public class NumberLineView extends View {
 
     private void drawMascot(Canvas canvas) {
         float centerY = getHeight() / 2f;
-//        gap = (float) getWidth() / (numberRangeEnd - numberRangeStart - 1);
-        float mascotPosition = (currentPosition - numberRangeStart - 1) * gap;
+        float mascotPosition = (currentPosition - numberRangeStart) * gap;
+        if (mascotPosition < 0) mascotPosition = 0;
+        if (mascotPosition > getWidth()) mascotPosition = getWidth();
         canvas.drawText("\uD83E\uDDCD\u200D♂\uFE0F", mascotPosition , centerY - 50f, mascotPaint);
     }
 
