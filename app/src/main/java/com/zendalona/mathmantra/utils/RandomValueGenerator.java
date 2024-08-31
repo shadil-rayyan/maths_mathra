@@ -12,12 +12,16 @@ public class RandomValueGenerator {
         this.random = new Random();
     }
 
+    public boolean generateNumberLineQuestion(){
+        return random.nextBoolean();
+    }
+
     public int generateQuestionTopic(){
         return random.nextInt(NO_OF_TOPICS);
     }
 
     public int generateNumberForCountGame() {
-        return random.nextInt(16);
+        return random.nextInt(16) + 2;
     }
 
     public int[] generateNumberRangeForCount(int upperBound){

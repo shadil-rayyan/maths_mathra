@@ -27,7 +27,7 @@ public class NarratorFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         tts = new TTSUtility(requireContext());
-        tts.setSpeechRate(0.8f);
+        tts.setSpeechRate(0.9f);
     }
 
     @Override

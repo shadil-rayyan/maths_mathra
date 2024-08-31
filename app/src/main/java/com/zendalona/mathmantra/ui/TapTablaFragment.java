@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
 import com.zendalona.mathmantra.R;
 import com.zendalona.mathmantra.databinding.DialogResultBinding;
@@ -50,7 +49,6 @@ public class TapTablaFragment extends Fragment {
         binding.tablaAnimationView.playAnimation();
         soundEffectUtility.playSound(R.raw.drums_sound);
         if(count == target) appreciateUser();
-        //TODO : if count == askedFor(<=9), display appreciation popup ; set count = 0 and a new asked for
     }
 
 

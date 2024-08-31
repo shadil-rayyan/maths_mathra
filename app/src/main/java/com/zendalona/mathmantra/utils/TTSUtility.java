@@ -11,7 +11,8 @@ public class TTSUtility {
     public TTSUtility(Context context) {
         tts = new TextToSpeech(context, status -> {
             if (status == TextToSpeech.SUCCESS) {
-                int result = tts.setLanguage(Locale.US);
+//                int result = tts.setLanguage(Locale.US);
+                int result = tts.setLanguage(Locale.forLanguageTag("en-IN"));
                 isInitialized = result != TextToSpeech.LANG_MISSING_DATA
                         && result != TextToSpeech.LANG_NOT_SUPPORTED;
             }
