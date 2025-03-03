@@ -11,7 +11,7 @@
         android:orientation="vertical"
         android:gravity="center">
 
-        <!-- Row 1: Bell Ring & Drum -->
+        <!-- Row 1 -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -20,7 +20,6 @@
             android:layout_marginBottom="10dp">
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/ringBellCv"
                 android:layout_width="175dp"
                 android:layout_height="100dp"
                 android:layout_marginStart="10dp"
@@ -32,14 +31,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Bell Ring"
+                    android:text="Time"
                     android:textColor="@color/primaryText"
                     android:textSize="20sp"
                     android:layout_gravity="center"/>
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/tapTablaCv"
                 android:layout_width="175dp"
                 android:layout_height="100dp"
                 android:layout_marginStart="10dp"
@@ -51,7 +49,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Drum"
+                    android:text="Currency"
                     android:textColor="@color/primaryText"
                     android:textSize="20sp"
                     android:layout_gravity="center"/>
@@ -59,7 +57,7 @@
 
         </LinearLayout>
 
-        <!-- Row 2: MCQ & Number Line -->
+        <!-- Row 2 -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -68,7 +66,6 @@
             android:layout_marginBottom="10dp">
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/mcqCv"
                 android:layout_width="175dp"
                 android:layout_height="100dp"
                 android:layout_marginStart="10dp"
@@ -80,14 +77,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="MCQ"
+                    android:text="Distance"
                     android:textColor="@color/primaryText"
                     android:textSize="20sp"
                     android:layout_gravity="center"/>
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/numberLineCv"
                 android:layout_width="175dp"
                 android:layout_height="100dp"
                 android:layout_marginStart="10dp"
@@ -99,7 +95,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Number Line"
+                    android:text="Arithmetic"
                     android:textColor="@color/primaryText"
                     android:textSize="20sp"
                     android:layout_gravity="center"/>
@@ -107,7 +103,7 @@
 
         </LinearLayout>
 
-        <!-- Row 3: Mental Calculation & Angle -->
+        <!-- Row 3 -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -116,7 +112,6 @@
             android:layout_marginBottom="10dp">
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/mental_calculation_button"
                 android:layout_width="175dp"
                 android:layout_height="100dp"
                 android:layout_marginStart="10dp"
@@ -128,14 +123,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Mental Calculation"
+                    android:text="Subtraction"
                     android:textColor="@color/primaryText"
                     android:textSize="18sp"
                     android:layout_gravity="center"/>
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/angle_button"
                 android:layout_width="175dp"
                 android:layout_height="100dp"
                 android:layout_marginStart="10dp"
@@ -147,7 +141,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Angle"
+                    android:text="Multiplication"
                     android:textColor="@color/primaryText"
                     android:textSize="20sp"
                     android:layout_gravity="center"/>
@@ -155,7 +149,7 @@
 
         </LinearLayout>
 
-        <!-- Row 4: Stereo Sound & Drawing -->
+        <!-- Row 4 -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -164,7 +158,6 @@
             android:layout_marginBottom="10dp">
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/stereo_sound_button"
                 android:layout_width="175dp"
                 android:layout_height="100dp"
                 android:layout_marginStart="10dp"
@@ -176,14 +169,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Stereo Sound"
+                    android:text="Division"
                     android:textColor="@color/primaryText"
                     android:textSize="18sp"
                     android:layout_gravity="center"/>
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/drawing_button"
                 android:layout_width="175dp"
                 android:layout_height="100dp"
                 android:layout_marginStart="10dp"
@@ -195,64 +187,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Drawing"
+                    android:text="Tiler Frame"
                     android:textColor="@color/primaryText"
                     android:textSize="20sp"
                     android:layout_gravity="center"/>
             </com.google.android.material.card.MaterialCardView>
 
         </LinearLayout>
-
-        <!-- Row 5: Direction & Touch the Screen -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_marginBottom="10dp">
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/direction_button"
-                android:layout_width="175dp"
-                android:layout_height="100dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                app:cardBackgroundColor="@color/button"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="10dp">
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="Direction"
-                    android:textColor="@color/primaryText"
-                    android:textSize="20sp" />
-
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/touch_the_screen_button"
-                android:layout_width="175dp"
-                android:layout_height="100dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                app:cardBackgroundColor="@color/button"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="10dp">
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="Touch the Screen"
-                    android:textColor="@color/primaryText"
-                    android:textSize="16sp" />
-
-            </com.google.android.material.card.MaterialCardView>
-
-        </LinearLayout>
-
 
     </LinearLayout>
 

@@ -40,18 +40,19 @@ public class DashboardFragment extends Fragment {
         binding.tapTablaCv.setOnClickListener(v -> {
             if (navigationListener != null) navigationListener.loadFragment(new TapTablaFragment(),FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         });
-        binding.speakNumbersCv.setOnClickListener(v -> {
-            if (navigationListener != null) navigationListener.loadFragment(new CountNumbersFragment(),FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-        });
-        binding.ttsCv.setOnClickListener(v -> {
-            if (navigationListener != null) navigationListener.loadFragment(new ChooseLessonFragment(),FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-        });
+//        binding.speakNumbersCv.setOnClickListener(v -> {
+//            if (navigationListener != null) navigationListener.loadFragment(new CountNumbersFragment(),FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+//        });
+//        binding.ttsCv.setOnClickListener(v -> {
+//            if (navigationListener != null) navigationListener.loadFragment(new ChooseLessonFragment(),FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+//        });
         binding.mcqCv.setOnClickListener(v -> {
             if (navigationListener != null) navigationListener.loadFragment(new MCQFragment(),FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         });
-        binding.mathQuizCv.setOnClickListener(v -> {
-            if (navigationListener != null) navigationListener.loadFragment(new MathQuizFragment(),FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-        });
+        //can use this for quick play screen
+//        binding.mathQuizCv.setOnClickListener(v -> {
+//            if (navigationListener != null) navigationListener.loadFragment(new MathQuizFragment(),FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+//        });
         binding.numberLineCv.setOnClickListener(v -> {
             if (navigationListener != null) navigationListener.loadFragment(new NumberLineFragment(),FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         });
