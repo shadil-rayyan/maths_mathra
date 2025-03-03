@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background"
     tools:context=".ui.NumberLineFragment">
 
     <LinearLayout
@@ -22,6 +23,7 @@
             android:clickable="true"
             android:contentDescription="Repeat Question"
             android:importantForAccessibility="yes"
+            android:textColor="@color/primaryText"
             android:layout_marginBottom="10dp"/>
 
 
@@ -44,6 +46,7 @@
             android:focusable="false"
             android:clickable="true"
             android:text="@string/use_to_move"
+            android:textColor="@color/primaryText"
             android:layout_marginBottom="50dp"/>
 
 
@@ -67,7 +70,9 @@
                 android:nextFocusRight="@id/btn_right"
                 android:importantForAccessibility="yes"
                 android:contentDescription="Subtract Button"
-                android:text="-" />
+                android:text="-"
+                android:textColor="@color/primaryText"
+                android:backgroundTint="@color/button" />
 
 
             <com.google.android.material.button.MaterialButton
@@ -83,7 +88,9 @@
                 android:nextFocusLeft="@id/btn_left"
                 android:nextFocusRight="@id/btn_left"
                 android:contentDescription="Add Button"
-                android:text="+" />
+                android:text="+"
+                android:textColor="@color/primaryText"
+                android:backgroundTint="@color/button" />
 
         </LinearLayout>
 
