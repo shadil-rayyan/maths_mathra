@@ -60,9 +60,16 @@ public class MainActivity extends AppCompatActivity implements FragmentNavigatio
 
     @Override
     public boolean onSupportNavigateUp() {
-        loadFragment(new LandingPageFragment(), FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        if (fragmentManager.getBackStackEntryCount() > 0) {
+            fragmentManager.popBackStack();
+        } else {
+            // No fragments in back stack, fallback to the landing page or finish the activity
+            loadFragment(new LandingPageFragment(), FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
+        }
         return true;
     }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
