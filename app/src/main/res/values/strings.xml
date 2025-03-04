@@ -3,4 +3,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="use_to_move"><![CDATA[<< Use -/+ to move >>]]></string>
+    <string name="accessibility_service_description">
+        Maths Mantra Accessibility Service helps provide better learning experience by observing screen content and providing spoken feedback.
+    </string>
 </resources>

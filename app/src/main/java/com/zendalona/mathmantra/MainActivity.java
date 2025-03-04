@@ -17,10 +17,18 @@ import com.zendalona.mathmantra.ui.LandingPageFragment;
 import com.zendalona.mathmantra.ui.LearningPageFragment;
 import com.zendalona.mathmantra.utils.FragmentNavigation;
 import com.zendalona.mathmantra.utils.PermissionManager;
+import com.zendalona.mathmantra.utils.AccessibilityUtils;
+import com.zendalona.mathmantra.utils.MathsManthraAccessibilityService;
 
 public class MainActivity extends AppCompatActivity implements FragmentNavigation {
     private ActivityMainBinding binding;
     private PermissionManager permissionManager;
+
+    // Static reference to accessibility service
+    private static MathsManthraAccessibilityService appAccessibilityService;
+
+    // Static instance of AccessibilityUtils
+    private static AccessibilityUtils accessibilityUtils = new AccessibilityUtils();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,15 +45,11 @@ public class MainActivity extends AppCompatActivity implements FragmentNavigatio
         binding.toolbar.setNavigationIconTint(getColor(android.R.color.white));
 
         if (savedInstanceState == null) {
-            // Load the landing page initially
             LandingPageFragment landingFragment = new LandingPageFragment();
             loadFragment(landingFragment, FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-
-            // Ensure the back button is hidden on initial load
             updateUpButtonVisibility(landingFragment);
         }
 
-        // Permissions management
         permissionManager = new PermissionManager(this, new PermissionManager.PermissionCallback() {
             @Override
             public void onPermissionGranted() {
@@ -58,9 +62,10 @@ public class MainActivity extends AppCompatActivity implements FragmentNavigatio
             }
         });
 
-        // Request necessary permissions
         permissionManager.requestMicrophonePermission();
-        // permissionManager.requestAccelerometerPermission();  // Uncomment if needed
+
+        // 🔔 Add Accessibility Service Check Here
+        checkAccessibilityService();
     }
 
     @Override
@@ -81,9 +86,6 @@ public class MainActivity extends AppCompatActivity implements FragmentNavigatio
         permissionManager.handlePermissionsResult(requestCode, permissions, grantResults);
     }
 
-    /**
-     * Load a new fragment into the container and manage the back stack + up button visibility.
-     */
     public void loadFragment(Fragment fragment, int transition) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -91,27 +93,50 @@ public class MainActivity extends AppCompatActivity implements FragmentNavigatio
         fragmentTransaction.replace(binding.fragmentContainer.getId(), fragment);
 
         if (fragment instanceof LandingPageFragment) {
-            // Clear back stack when loading the Landing Page
             fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         } else {
-            // Add other fragments to back stack
             fragmentTransaction.addToBackStack(null);
         }
 
         fragmentTransaction.commit();
-
-        // Update back button visibility based on the current fragment
         updateUpButtonVisibility(fragment);
     }
 
-    /**
-     * Updates the toolbar's back button visibility based on which fragment is currently shown.
-     */
     private void updateUpButtonVisibility(Fragment fragment) {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             boolean isHomePage = fragment instanceof LandingPageFragment;
-            actionBar.setDisplayHomeAsUpEnabled(!isHomePage);  // Hide back button on home page
+            actionBar.setDisplayHomeAsUpEnabled(!isHomePage);
+        }
+    }
+
+    // Static method to allow the AccessibilityService to set itself
+    public static void set_accessibility_service(MathsManthraAccessibilityService myAccessibilityService) {
+        appAccessibilityService = myAccessibilityService;
+    }
+
+    // Optional: Provide access to AccessibilityUtils if needed elsewhere
+    public static AccessibilityUtils getAccessibilityUtils() {
+        return accessibilityUtils;
+    }
+
+    // Optional: Method to interact with the accessibility service if needed
+    public static void updateWindowState() {
+        Log.d("MainActivity", "Accessibility Event Triggered: Updating Window State");
+        // Example logic; you can add more here if needed.
+    }
+
+    private void checkAccessibilityService() {
+        AccessibilityUtils utils = new AccessibilityUtils();
+
+        boolean isTalkBackOn = utils.isSystemExploreByTouchEnabled(this);
+        boolean isServiceEnabled = AccessibilityUtils.isMathsManthraAccessibilityServiceEnabled(this);
+
+        if (isTalkBackOn && !isServiceEnabled) {
+            Log.w("AccessibilityCheck", "TalkBack is ON but MathsManthraAccessibilityService is OFF. Redirecting user.");
+            AccessibilityUtils.redirectToAccessibilitySettings(this);
+        } else {
+            Log.d("AccessibilityCheck", "Accessibility check passed.");
         }
     }
 }
