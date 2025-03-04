@@ -18,8 +18,6 @@ import com.zendalona.mathmantra.ui.LearningPageFragment;
 import com.zendalona.mathmantra.utils.FragmentNavigation;
 import com.zendalona.mathmantra.utils.PermissionManager;
 
-import java.util.Optional;
-
 public class MainActivity extends AppCompatActivity implements FragmentNavigation {
     private ActivityMainBinding binding;
     private PermissionManager permissionManager;
@@ -35,27 +33,34 @@ public class MainActivity extends AppCompatActivity implements FragmentNavigatio
         controller.hide(WindowInsetsCompat.Type.statusBars() | WindowInsetsCompat.Type.navigationBars());
         controller.setSystemBarsBehavior(WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
 
-        if (savedInstanceState == null) loadFragment(new LandingPageFragment(), FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-
         setSupportActionBar(binding.toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) actionBar.setDisplayHomeAsUpEnabled(true);
+        binding.toolbar.setNavigationIconTint(getColor(android.R.color.white));
 
+        if (savedInstanceState == null) {
+            // Load the landing page initially
+            LandingPageFragment landingFragment = new LandingPageFragment();
+            loadFragment(landingFragment, FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
 
-        //Permissions management
+            // Ensure the back button is hidden on initial load
+            updateUpButtonVisibility(landingFragment);
+        }
+
+        // Permissions management
         permissionManager = new PermissionManager(this, new PermissionManager.PermissionCallback() {
             @Override
             public void onPermissionGranted() {
                 Log.d("PermissionManager.PermissionCallback", "Granted!");
             }
+
             @Override
             public void onPermissionDenied() {
                 Log.w("PermissionManager.PermissionCallback", "Denied!");
             }
         });
-        // TODO : ask for the sensor permissions
+
+        // Request necessary permissions
         permissionManager.requestMicrophonePermission();
-//        permissionManager.requestAccelerometerPermission();
+        // permissionManager.requestAccelerometerPermission();  // Uncomment if needed
     }
 
     @Override
@@ -64,12 +69,11 @@ public class MainActivity extends AppCompatActivity implements FragmentNavigatio
         if (fragmentManager.getBackStackEntryCount() > 0) {
             fragmentManager.popBackStack();
         } else {
-            // No fragments in back stack, fallback to the landing page or finish the activity
+            // If no fragments are left in back stack, reload the landing page
             loadFragment(new LandingPageFragment(), FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
         }
         return true;
     }
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
@@ -77,13 +81,37 @@ public class MainActivity extends AppCompatActivity implements FragmentNavigatio
         permissionManager.handlePermissionsResult(requestCode, permissions, grantResults);
     }
 
+    /**
+     * Load a new fragment into the container and manage the back stack + up button visibility.
+     */
     public void loadFragment(Fragment fragment, int transition) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.setTransition(transition);
         fragmentTransaction.replace(binding.fragmentContainer.getId(), fragment);
-        // TODO : binding.toolbar.setTitle();
+
+        if (fragment instanceof LandingPageFragment) {
+            // Clear back stack when loading the Landing Page
+            fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        } else {
+            // Add other fragments to back stack
+            fragmentTransaction.addToBackStack(null);
+        }
+
         fragmentTransaction.commit();
+
+        // Update back button visibility based on the current fragment
+        updateUpButtonVisibility(fragment);
     }
 
+    /**
+     * Updates the toolbar's back button visibility based on which fragment is currently shown.
+     */
+    private void updateUpButtonVisibility(Fragment fragment) {
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            boolean isHomePage = fragment instanceof LandingPageFragment;
+            actionBar.setDisplayHomeAsUpEnabled(!isHomePage);  // Hide back button on home page
+        }
+    }
 }
