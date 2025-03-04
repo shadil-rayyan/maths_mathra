@@ -48,4 +48,6 @@ public class MathsManthraAccessibilityService extends AccessibilityService {
         // Notify user that the accessibility service is activated
         Toast.makeText(this, "Accessibility Service Activated", Toast.LENGTH_SHORT).show();
     }
+
+
 }

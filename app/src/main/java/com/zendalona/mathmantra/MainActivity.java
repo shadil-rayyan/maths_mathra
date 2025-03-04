@@ -8,8 +8,11 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.graphics.Region;
+import android.view.Display;
 
 import com.zendalona.mathmantra.databinding.ActivityMainBinding;
 import com.zendalona.mathmantra.ui.DashboardFragment;
@@ -26,6 +29,11 @@ public class MainActivity extends AppCompatActivity implements FragmentNavigatio
 
     // Static reference to accessibility service
     private static MathsManthraAccessibilityService appAccessibilityService;
+    private Region getRegionOfFullScreen(MainActivity activity) {
+        int screenWidth = activity.getResources().getDisplayMetrics().widthPixels;
+        int screenHeight = activity.getResources().getDisplayMetrics().heightPixels;
+        return new Region(0, 0, screenWidth, screenHeight);
+    }
 
     // Static instance of AccessibilityUtils
     private static AccessibilityUtils accessibilityUtils = new AccessibilityUtils();
@@ -139,4 +147,30 @@ public class MainActivity extends AppCompatActivity implements FragmentNavigatio
             Log.d("AccessibilityCheck", "Accessibility check passed.");
         }
     }
+
+    public void disableExploreByTouch() {
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && appAccessibilityService != null) {
+                Region fullScreenRegion = getRegionOfFullScreen(this);
+
+                Log.e("AAAA disableExploreByTouch", "Region " + fullScreenRegion);
+
+                appAccessibilityService.setTouchExplorationPassthroughRegion(Display.DEFAULT_DISPLAY, fullScreenRegion);
+                appAccessibilityService.setGestureDetectionPassthroughRegion(Display.DEFAULT_DISPLAY, fullScreenRegion);
+
+                Log.e("AAAA disableExploreByTouch", "Explore by Touch disabled");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void resetExploreByTouch() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && appAccessibilityService != null) {
+            Region emptyRegion = new Region();  // Clear passthrough regions (restore normal TalkBack behavior)
+            appAccessibilityService.setTouchExplorationPassthroughRegion(Display.DEFAULT_DISPLAY, emptyRegion);
+            appAccessibilityService.setGestureDetectionPassthroughRegion(Display.DEFAULT_DISPLAY, emptyRegion);
+        }
+    }
+
 }
