@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/background"
     tools:context=".ui.MathQuizFragment"
     android:contentDescription="Math quiz screen. Solve the math problem and enter your answer.">
@@ -42,17 +43,23 @@
             android:layout_margin="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:contentDescription="Enter your answer here">
+            android:contentDescription="Enter your answer here"
+            app:boxBackgroundMode="outline"
+            android:textColor="@color/primaryText"
+            app:boxBackgroundColor="@color/background">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/answer_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="number"
+                android:contentDescription="Answer input field. Enter your answer here."
                 android:hint="Your Answer Here"
                 android:textColorHint="@color/primaryText"
+                android:textColor="@color/primaryText"
+                android:backgroundTint="@color/primaryText"
                 android:importantForAccessibility="yes"
-                android:contentDescription="Answer input field. Enter your answer here." />
+                android:inputType="number"
+                 />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Submit Button -->
