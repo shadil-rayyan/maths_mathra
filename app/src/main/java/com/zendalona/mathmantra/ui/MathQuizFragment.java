@@ -5,6 +5,8 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,13 +72,19 @@ public class MathQuizFragment extends Fragment {
 
         dialogBinding.messageTextView.setText(message);
 
-        new AlertDialog.Builder(requireContext())
+        AlertDialog dialog = new AlertDialog.Builder(requireContext())
                 .setView(dialogView)
-                .setPositiveButton("OK", (dialog, which) -> {
-                    dialog.dismiss();
-                    generateNewQuestion();
-                })
-                .create()
-                .show();
+                .setCancelable(false) // Optional - makes sure user doesn't close it manually
+                .create();
+
+        dialog.show();
+
+        // Automatically dismiss the dialog after 4 seconds and generate a new question
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            if (dialog.isShowing()) {
+                dialog.dismiss();
+                generateNewQuestion();
+            }
+        }, 4000); // 4000 milliseconds = 4 seconds
     }
 }
