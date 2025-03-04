@@ -23,6 +23,7 @@
             android:clickable="false"
             android:focusable="false"
             android:text="0"
+            android:textColor="@color/primaryText"
             android:textSize="48sp"/>
 
         <com.airbnb.lottie.LottieAnimationView
@@ -33,6 +34,7 @@
             android:clickable="true"
             android:focusable="true"
             android:contentDescription="Double tap to play drums"
+            android:background="@color/primaryText"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.503"
             app:layout_constraintStart_toStartOf="parent"
@@ -49,6 +51,7 @@
             android:clickable="false"
             android:focusable="false"
             android:text="Tap to play!"
+            android:textColor="@color/primaryText"
             android:textSize="48sp"
             android:textAlignment="center"
             app:layout_constraintBottom_toTopOf="@+id/mole_up_siv"

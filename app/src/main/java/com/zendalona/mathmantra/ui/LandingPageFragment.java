@@ -49,7 +49,7 @@ public class LandingPageFragment extends Fragment {
 
         binding.gameModeButton.setOnClickListener(v -> {
             if (navigationListener != null) {
-                navigationListener.loadFragment(new RingBellFragment(), FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                navigationListener.loadFragment(new DashboardFragment(), FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
             }
         });
 

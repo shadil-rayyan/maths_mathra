@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:textSize="24sp"
             android:text="Let us talk about the number which is the beginning of the Number System"
-            android:textColor="@color/black"
+            android:textColor="@color/primaryText"
             android:gravity="center"
             android:focusable="false"
             android:clickable="false"
@@ -46,9 +46,11 @@
                 android:layout_height="wrap_content"
                 android:textSize="24sp"
                 android:text="Previous"
+                android:textColor="@color/primaryText"
                 android:padding="12dp"
                 android:layout_margin="20dp"
                 android:contentDescription="Go to previous page"
+                android:backgroundTint="@color/button"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>
 
@@ -61,6 +63,8 @@
                 android:textSize="24sp"
                 android:layout_margin="20dp"
                 android:contentDescription="Go to next page"
+                android:textColor="@color/primaryText"
+                android:backgroundTint="@color/button"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>
 
@@ -73,6 +77,8 @@
             android:textSize="24sp"
             android:layout_margin="20dp"
             android:contentDescription="Repeat current page"
+            android:textColor="@color/primaryText"
+            android:backgroundTint="@color/button"
             app:layout_constraintStart_toEndOf="@id/previous_button"
             app:layout_constraintEnd_toStartOf="@id/next_button"
             app:layout_constraintBottom_toBottomOf="parent"/>

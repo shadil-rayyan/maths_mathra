@@ -13,6 +13,8 @@ import android.util.Log;
 
 import com.zendalona.mathmantra.databinding.ActivityMainBinding;
 import com.zendalona.mathmantra.ui.DashboardFragment;
+import com.zendalona.mathmantra.ui.LandingPageFragment;
+import com.zendalona.mathmantra.ui.LearningPageFragment;
 import com.zendalona.mathmantra.utils.FragmentNavigation;
 import com.zendalona.mathmantra.utils.PermissionManager;
 
@@ -33,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements FragmentNavigatio
         controller.hide(WindowInsetsCompat.Type.statusBars() | WindowInsetsCompat.Type.navigationBars());
         controller.setSystemBarsBehavior(WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
 
-        if (savedInstanceState == null) loadFragment(new DashboardFragment(), FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        if (savedInstanceState == null) loadFragment(new LandingPageFragment(), FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
 
         setSupportActionBar(binding.toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -58,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements FragmentNavigatio
 
     @Override
     public boolean onSupportNavigateUp() {
-        loadFragment(new DashboardFragment(), FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
+        loadFragment(new LandingPageFragment(), FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
         return true;
     }
 

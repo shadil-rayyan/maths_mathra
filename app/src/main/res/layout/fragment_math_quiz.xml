@@ -18,16 +18,16 @@
         android:text="Calculate the valute of :"
         android:textSize="24sp"
         android:layout_margin="10dp"
-        android:textColor="@color/black" />
+        android:textColor="@color/primaryText" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/question_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="2 + 2 = ?"
+            android:textColor="@color/primaryText"
             android:layout_margin="10dp"
-            android:textSize="48sp"
-            android:textColor="@color/black"/>
+            android:textSize="48sp"/>
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_margin="10dp"
@@ -38,7 +38,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="number"
-                android:hint="Your Answer Here"/>
+                android:hint="Your Answer Here"
+                android:textColorHint="@color/primaryText"
+               />
+
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
@@ -47,7 +50,10 @@
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
             android:textSize="24sp"
-            android:text="Submit"/>
+            android:text="Submit"
+            android:textColor="@color/primaryText"
+            android:backgroundTint="@color/button"
+            />
     </LinearLayout>
 
 </FrameLayout>
