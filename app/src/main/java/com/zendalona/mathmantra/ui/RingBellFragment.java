@@ -89,7 +89,7 @@ public class RingBellFragment extends Fragment {
         count = 0;
         binding.ringCount.setText(String.valueOf(count));
         target = randomValueGenerator.generateNumberForCountGame();
-        String targetText = "Ring the bell " + target + " times";
+        String targetText = "Ring the bell  " + target + " times by shaking the phone";
         tts.speak(targetText);
         binding.ringMeTv.setText(targetText);
     }
