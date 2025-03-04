@@ -35,9 +35,40 @@ public class LandingPageFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentLandingpageBinding.inflate(inflater, container, false);
 
-        binding.gameModeButton.setOnClickListener(v -> {
-            if (navigationListener != null) navigationListener.loadFragment(new RingBellFragment(),FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        binding.quickPlayButton.setOnClickListener(v -> {
+            if (navigationListener != null) {
+                navigationListener.loadFragment(new MathQuizFragment(), FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+            }
         });
+
+        binding.learningModeButton.setOnClickListener(v -> {
+            if (navigationListener != null) {
+                navigationListener.loadFragment(new LearningPageFragment(), FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+            }
+        });
+
+        binding.gameModeButton.setOnClickListener(v -> {
+            if (navigationListener != null) {
+                navigationListener.loadFragment(new RingBellFragment(), FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+            }
+        });
+
+        binding.userGuideButton.setOnClickListener(v -> {
+            if (navigationListener != null) {
+//                navigationListener.loadFragment(new UserGuideFragment(), FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+            }
+        });
+
+        binding.settingsButton.setOnClickListener(v -> {
+            if (navigationListener != null) {
+//                navigationListener.loadFragment(new SettingsFragment(), FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+            }
+        });
+
+        binding.quitButton.setOnClickListener(v -> {
+            getActivity().finish();  // Quit the app
+        });
+
 
 
 
