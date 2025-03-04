@@ -5,13 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    tools:context=".ui.TapTablaFragment">
+    tools:context=".ui.TapTablaFragment"
+    android:contentDescription="This is the Tabla Play Screen. Double tap on the drum animation to play tabla sound. The app is fully loaded and ready.">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <!-- Tap Count - Static Text (Optional Announcement) -->
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tap_count"
             android:layout_width="wrap_content"
@@ -24,8 +26,10 @@
             android:focusable="false"
             android:text="0"
             android:textColor="@color/primaryText"
-            android:textSize="48sp"/>
+            android:textSize="48sp"
+            android:contentDescription="Tap count: 0" />
 
+        <!-- Tabla Animation - Main Interactive Element -->
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/tabla_animation_view"
             android:layout_width="250dp"
@@ -33,7 +37,7 @@
             android:layout_marginTop="48dp"
             android:clickable="true"
             android:focusable="true"
-            android:contentDescription="Double tap to play drums"
+            android:contentDescription="Double tap to play the tabla sound. This is the main interactive drum animation."
             android:background="@color/primaryText"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.503"
@@ -43,6 +47,7 @@
             app:lottie_loop="false"
             app:lottie_rawRes="@raw/drums" />
 
+        <!-- Tap to Play Text - Useful for context -->
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tap_me_tv"
             android:layout_width="wrap_content"
@@ -54,10 +59,12 @@
             android:textColor="@color/primaryText"
             android:textSize="48sp"
             android:textAlignment="center"
+            android:contentDescription="Instruction: Double tap the tabla above to play the drum sound."
             app:layout_constraintBottom_toTopOf="@+id/mole_up_siv"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
+        <!-- Mole Image - Decorative but can be described if needed -->
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/mole_up_siv"
             android:layout_width="200dp"
@@ -66,6 +73,7 @@
             android:clickable="false"
             android:focusable="false"
             android:src="@drawable/molepointingup"
+            android:contentDescription="Decorative image: cartoon mole pointing upwards."
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

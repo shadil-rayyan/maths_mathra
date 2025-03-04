@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    tools:context=".ui.MCQFragment">
+    tools:context=".ui.MCQFragment"
+    android:contentDescription="Multiple choice question screen. Choose the correct answer to the question displayed.">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -12,15 +13,18 @@
         android:orientation="vertical"
         android:gravity="center"
         android:padding="20dp">
+
+        <!-- Instruction Text -->
         <com.google.android.material.textview.MaterialTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="What is the valute of :"
+            android:text="What is the value of:"
             android:textColor="@color/primaryText"
             android:textSize="24sp"
             android:layout_margin="10dp"
-             />
+            android:contentDescription="Instruction. What is the value of the following equation?" />
 
+        <!-- Math Question Text -->
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/question_tv"
             android:layout_width="match_parent"
@@ -30,62 +34,70 @@
             android:textAlignment="center"
             android:layout_margin="10dp"
             android:textSize="48sp"
-            />
+            android:focusable="true"
+            android:clickable="true"
+            android:contentDescription="Question. What is 2 plus 2? Double tap to repeat." />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="50dp"
-        android:gravity="center">
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/option_a"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:textSize="24sp"
-            android:text="100"
-            android:textColor="@color/primaryText"
-            android:backgroundTint="@color/button"
-            />
+        <!-- First Row of Options -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="50dp"
+            android:gravity="center">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/option_b"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_marginStart="100dp"
-            android:textSize="24sp"
-            android:text="200"
-            android:textColor="@color/primaryText"
-            android:backgroundTint="@color/button"/>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/option_a"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:textSize="24sp"
+                android:text="100"
+                android:textColor="@color/primaryText"
+                android:backgroundTint="@color/button"
+                android:contentDescription="Option A. 100. Double tap to select." />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/option_b"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_marginStart="100dp"
+                android:textSize="24sp"
+                android:text="200"
+                android:textColor="@color/primaryText"
+                android:backgroundTint="@color/button"
+                android:contentDescription="Option B. 200. Double tap to select." />
+        </LinearLayout>
+
+        <!-- Second Row of Options -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="50dp"
+            android:gravity="center">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/option_c"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:textSize="24sp"
+                android:text="100"
+                android:textColor="@color/primaryText"
+                android:backgroundTint="@color/button"
+                android:contentDescription="Option C. 100. Double tap to select." />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/option_d"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_marginStart="100dp"
+                android:textSize="24sp"
+                android:text="200"
+                android:textColor="@color/primaryText"
+                android:backgroundTint="@color/button"
+                android:contentDescription="Option D. 200. Double tap to select." />
+        </LinearLayout>
+
     </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="50dp"
-        android:gravity="center">
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/option_c"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:textSize="24sp"
-            android:text="100"
-            android:textColor="@color/primaryText"
-            android:backgroundTint="@color/button"/>
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/option_d"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_marginStart="100dp"
-            android:textSize="24sp"
-            android:text="200"
-            android:textColor="@color/primaryText"
-            android:backgroundTint="@color/button"/>
-    </LinearLayout>
-
-</LinearLayout>
-
 
 </FrameLayout>

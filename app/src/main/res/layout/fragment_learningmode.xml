@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background">
+    android:background="@color/background"
+    android:contentDescription="You are on the Learning page  Please choose an activity to continue.">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -27,7 +28,9 @@
                 android:layout_marginEnd="10dp"
                 app:cardCornerRadius="20dp"
                 app:cardElevation="10dp"
-                app:cardBackgroundColor="@color/button">
+                app:cardBackgroundColor="@color/button"
+                android:contentDescription=" open Time mode ">
+
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -39,15 +42,17 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardCurrency"
                 android:layout_width="175dp"
                 android:layout_height="100dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
                 app:cardCornerRadius="20dp"
                 app:cardElevation="10dp"
-                app:cardBackgroundColor="@color/button">
+                app:cardBackgroundColor="@color/button"
+                android:contentDescription="Open Currency Activities">
+
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/cardCurrency"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -75,7 +80,9 @@
                 android:layout_marginEnd="10dp"
                 app:cardCornerRadius="20dp"
                 app:cardElevation="10dp"
-                app:cardBackgroundColor="@color/button">
+                app:cardBackgroundColor="@color/button"
+                android:contentDescription="Open Distance Activities">
+
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -94,7 +101,9 @@
                 android:layout_marginEnd="10dp"
                 app:cardCornerRadius="20dp"
                 app:cardElevation="10dp"
-                app:cardBackgroundColor="@color/button">
+                app:cardBackgroundColor="@color/button"
+                android:contentDescription="Open Addition Activities">
+
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -123,7 +132,9 @@
                 android:layout_marginEnd="10dp"
                 app:cardCornerRadius="20dp"
                 app:cardElevation="10dp"
-                app:cardBackgroundColor="@color/button">
+                app:cardBackgroundColor="@color/button"
+                android:contentDescription="Open Subtraction Activities">
+
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -142,7 +153,9 @@
                 android:layout_marginEnd="10dp"
                 app:cardCornerRadius="20dp"
                 app:cardElevation="10dp"
-                app:cardBackgroundColor="@color/button">
+                app:cardBackgroundColor="@color/button"
+                android:contentDescription="Open Multiplication Activities">
+
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -171,7 +184,9 @@
                 android:layout_marginEnd="10dp"
                 app:cardCornerRadius="20dp"
                 app:cardElevation="10dp"
-                app:cardBackgroundColor="@color/button">
+                app:cardBackgroundColor="@color/button"
+                android:contentDescription="Open Division Activities">
+
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -190,7 +205,9 @@
                 android:layout_marginEnd="10dp"
                 app:cardCornerRadius="20dp"
                 app:cardElevation="10dp"
-                app:cardBackgroundColor="@color/button">
+                app:cardBackgroundColor="@color/button"
+                android:contentDescription="Open Tiler Frame Activities">
+
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
