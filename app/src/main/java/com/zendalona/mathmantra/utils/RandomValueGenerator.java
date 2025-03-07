@@ -125,4 +125,7 @@ public class RandomValueGenerator {
         return values;
     }
 
+    public float generateRandomDegree() {
+        return random.nextInt(360); // Random number between 0 - 360
+    }
 }

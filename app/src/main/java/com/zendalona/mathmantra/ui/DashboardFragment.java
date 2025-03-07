@@ -50,9 +50,9 @@ public class DashboardFragment extends Fragment {
             if (navigationListener != null) navigationListener.loadFragment(new MCQFragment(),FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         });
         //can use this for quick play screen
-//        binding.mathQuizCv.setOnClickListener(v -> {
-//            if (navigationListener != null) navigationListener.loadFragment(new MathQuizFragment(),FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-//        });
+        binding.directionButton.setOnClickListener(v -> {
+            if (navigationListener != null) navigationListener.loadFragment(new DirectionFragment(),FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        });
         binding.numberLineCv.setOnClickListener(v -> {
             if (navigationListener != null) navigationListener.loadFragment(new NumberLineFragment(),FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         });
