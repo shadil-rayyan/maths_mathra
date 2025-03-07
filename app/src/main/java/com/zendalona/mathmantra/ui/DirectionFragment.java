@@ -17,7 +17,6 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.zendalona.mathmantra.databinding.FragmentDirectionBinding;
 import com.zendalona.mathmantra.utils.RandomValueGenerator;
@@ -37,8 +36,8 @@ public class DirectionFragment extends Fragment implements SensorEventListener {
     private final float[] rotationMatrix = new float[9];
     private final float[] orientation = new float[3];
 
-    private float targetDirection = 0f; // The target angle user needs to match
-    private boolean questionAnswered = false; // Prevent multiple alerts
+    private float targetDirection = 0f;
+    private boolean questionAnswered = false;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -56,7 +55,7 @@ public class DirectionFragment extends Fragment implements SensorEventListener {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentDirectionBinding.inflate(inflater, container, false);
-        generateNewQuestion(); // Generate first question on launch
+        generateNewQuestion();  // Initial question
         return binding.getRoot();
     }
 
@@ -101,23 +100,25 @@ public class DirectionFragment extends Fragment implements SensorEventListener {
     private void updateCompassUI(float rotationDegrees) {
         if (binding == null) return;
 
-        // Rotate ImageView directly (faster than bitmap manipulation)
         binding.compass.setRotation(rotationDegrees);
 
-        // Update degree text
         String degreeText = String.format("%.0f°", (rotationDegrees + 360) % 360);
         binding.degreeText.setText(degreeText);
 
-        // Check if user reached the target direction
+        // Set accessible content description
+        binding.degreeText.setContentDescription("Current direction " + degreeText);
+
+        // Optional: Announce the real-time direction for TalkBack users (can be noisy if left on)
+        binding.degreeText.announceForAccessibility("Current direction " + degreeText);
+
         checkIfCorrect(rotationDegrees);
     }
 
     private void checkIfCorrect(float currentDegrees) {
-        if (questionAnswered) return; // Prevent multiple alerts
+        if (questionAnswered) return;
 
         float difference = Math.abs(targetDirection - ((currentDegrees + 360) % 360));
 
-        // Allow small error margin (±10°)
         if (difference <= 10) {
             questionAnswered = true;
             showResultDialog();
@@ -133,7 +134,9 @@ public class DirectionFragment extends Fragment implements SensorEventListener {
 
         dialog.show();
 
-        // Dismiss after 3 seconds and generate new question
+        // Announce result to TalkBack
+        binding.getRoot().announceForAccessibility("Correct! You turned to the correct direction!");
+
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             if (dialog.isShowing()) {
                 dialog.dismiss();
@@ -143,19 +146,23 @@ public class DirectionFragment extends Fragment implements SensorEventListener {
     }
 
     private void generateNewQuestion() {
-        targetDirection = random.generateRandomDegree(); // Random value from 0° to 360°
+        targetDirection = random.generateRandomDegree();
         questionAnswered = false;
-        binding.questionTv.setText("Turn to " + (int) targetDirection + "°");
+        String questionText = "Turn to " + (int) targetDirection + "°";
+        binding.questionTv.setText(questionText);
+
+        // Announce question to TalkBack
+        binding.questionTv.announceForAccessibility(questionText);
     }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
-        // Not needed
+        // No need to handle this for now
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        binding = null;  // Prevent memory leaks
+        binding = null;
     }
 }
