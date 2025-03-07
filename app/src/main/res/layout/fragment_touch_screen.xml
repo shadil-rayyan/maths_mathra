@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/background"
+    tools:context=".ui.MathQuizFragment"
+    android:contentDescription="Math quiz screen. Solve the math problem and enter your answer.">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="50dp">
+
+        <!-- Instruction Text -->
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/finger_instruction"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:layout_margin="10dp"
+            android:textColor="@color/primaryText"
+            android:gravity="center"
+            android:contentDescription="Instruction to touch screen with X fingers" />
+
+    </LinearLayout>
+
+</FrameLayout>

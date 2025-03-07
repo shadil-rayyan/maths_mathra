@@ -37,6 +37,7 @@ public class TapTablaFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         soundEffectUtility = SoundEffectUtility.getInstance(requireContext());
+        //check if talkback is on
         talkBackEnabled = AccessibilityUtils.isMathsManthraAccessibilityServiceEnabled(requireContext());
     }
 
@@ -49,7 +50,7 @@ public class TapTablaFragment extends Fragment {
 
         // Always allow tapping tabla directly
         binding.tablaAnimationView.setOnClickListener(v -> onTablaTapped());
-
+        // make sure that the drum will work if touched anywhere on screen
         setupGlobalTouchHandler();
 
         return binding.getRoot();
