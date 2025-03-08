@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@color/background">
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/tvUserGuide"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/primaryText"
+            android:textSize="16sp"
+            android:paddingBottom="16dp" />
+    </ScrollView>
+
+    <Button
+        android:id="@+id/btnGoToTop"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Go To Top"
+        android:backgroundTint="@color/button"
+        android:textColor="@color/white"
+        android:padding="12dp" />
+
+</LinearLayout>

@@ -55,7 +55,7 @@ public class LandingPageFragment extends Fragment {
 
         binding.userGuideButton.setOnClickListener(v -> {
             if (navigationListener != null) {
-//                navigationListener.loadFragment(new UserGuideFragment(), FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                navigationListener.loadFragment(new UserGuideFragment(), FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
             }
         });
 
