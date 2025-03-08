@@ -40,9 +40,9 @@ public class DashboardFragment extends Fragment {
         binding.tapTablaCv.setOnClickListener(v -> {
             if (navigationListener != null) navigationListener.loadFragment(new TapTablaFragment(),FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         });
-//        binding.speakNumbersCv.setOnClickListener(v -> {
-//            if (navigationListener != null) navigationListener.loadFragment(new CountNumbersFragment(),FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-//        });
+        binding.angleButton.setOnClickListener(v -> {
+            if (navigationListener != null) navigationListener.loadFragment(new AngleFragment(),FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        });
 //        binding.ttsCv.setOnClickListener(v -> {
 //            if (navigationListener != null) navigationListener.loadFragment(new ChooseLessonFragment(),FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
 //        });
