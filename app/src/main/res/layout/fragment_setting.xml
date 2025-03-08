@@ -4,16 +4,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:padding="16dp"
         android:background="@color/background">
 
-     <!-- Title -->
+        <!-- Title -->
         <TextView
             android:id="@+id/settings_title"
             android:layout_width="wrap_content"
@@ -25,7 +26,10 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginBottom="16dp" />
+            android:layout_marginBottom="16dp"
+            android:importantForAccessibility="yes"
+            android:focusable="true"
+            android:focusableInTouchMode="true"/>
 
         <!-- Music Volume Section -->
         <TextView
@@ -36,7 +40,9 @@
             android:textColor="@color/primaryText"
             android:textSize="16sp"
             app:layout_constraintTop_toBottomOf="@id/settings_title"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            android:labelFor="@id/music_volume_value"
+            android:importantForAccessibility="yes"/>
 
         <Button
             android:id="@+id/music_volume_decrease"
@@ -47,7 +53,8 @@
             android:backgroundTint="@color/button"
             app:layout_constraintTop_toBottomOf="@id/music_volume_label"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginTop="8dp"/>
+            android:layout_marginTop="8dp"
+            android:contentDescription="Decrease music volume"/>
 
         <TextView
             android:id="@+id/music_volume_value"
@@ -63,7 +70,11 @@
             app:layout_constraintEnd_toStartOf="@id/music_volume_increase"
             app:layout_constraintHorizontal_bias="0.496"
             app:layout_constraintStart_toEndOf="@id/music_volume_decrease"
-            app:layout_constraintTop_toBottomOf="@id/music_volume_label" />
+            app:layout_constraintTop_toBottomOf="@id/music_volume_label"
+            android:importantForAccessibility="yes"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:contentDescription="Current music volume is 24"/>
 
         <Button
             android:id="@+id/music_volume_increase"
@@ -74,19 +85,22 @@
             android:backgroundTint="@color/button"
             app:layout_constraintTop_toBottomOf="@id/music_volume_label"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="8dp"/>
+            android:layout_marginTop="8dp"
+            android:contentDescription="Increase music volume"/>
 
         <!-- Speech Volume Section -->
         <TextView
             android:id="@+id/speech_volume_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="speech_volume"
+            android:text="Speech Volume"
             android:textColor="@color/primaryText"
             android:textSize="16sp"
             app:layout_constraintTop_toBottomOf="@id/music_volume_increase"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginTop="16dp" />
+            android:layout_marginTop="16dp"
+            android:labelFor="@id/speech_volume_value"
+            android:importantForAccessibility="yes"/>
 
         <Button
             android:id="@+id/speech_volume_decrease"
@@ -97,7 +111,8 @@
             android:backgroundTint="@color/button"
             app:layout_constraintTop_toBottomOf="@id/speech_volume_label"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginTop="8dp"/>
+            android:layout_marginTop="8dp"
+            android:contentDescription="Decrease speech volume"/>
 
         <TextView
             android:id="@+id/speech_volume_value"
@@ -113,7 +128,11 @@
             app:layout_constraintEnd_toStartOf="@id/speech_volume_increase"
             app:layout_constraintHorizontal_bias="0.436"
             app:layout_constraintStart_toEndOf="@id/speech_volume_decrease"
-            app:layout_constraintTop_toBottomOf="@id/speech_volume_label" />
+            app:layout_constraintTop_toBottomOf="@id/speech_volume_label"
+            android:importantForAccessibility="yes"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:contentDescription="Current speech volume is 24"/>
 
         <Button
             android:id="@+id/speech_volume_increase"
@@ -124,7 +143,8 @@
             android:backgroundTint="@color/button"
             app:layout_constraintTop_toBottomOf="@id/speech_volume_label"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="8dp"/>
+            android:layout_marginTop="8dp"
+            android:contentDescription="Increase speech volume"/>
 
         <!-- Background Music Toggle -->
         <Switch
@@ -137,19 +157,22 @@
             android:textColor="@color/primaryText"
             android:background="@color/button"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/speech_volume_increase" />
+            app:layout_constraintTop_toBottomOf="@id/speech_volume_increase"
+            android:contentDescription="Toggle background music on or off"/>
 
         <!-- Font Size Section -->
         <TextView
             android:id="@+id/font_size_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="font_size"
+            android:text="Font Size"
             android:textColor="@color/primaryText"
             android:textSize="16sp"
             app:layout_constraintTop_toBottomOf="@id/background_music_toggle"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginTop="16dp" />
+            android:layout_marginTop="16dp"
+            android:labelFor="@id/font_size_value"
+            android:importantForAccessibility="yes"/>
 
         <Button
             android:id="@+id/font_size_decrease"
@@ -160,7 +183,8 @@
             android:backgroundTint="@color/button"
             app:layout_constraintTop_toBottomOf="@id/font_size_label"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginTop="8dp"/>
+            android:layout_marginTop="8dp"
+            android:contentDescription="Decrease font size"/>
 
         <TextView
             android:id="@+id/font_size_value"
@@ -176,7 +200,11 @@
             app:layout_constraintEnd_toStartOf="@id/font_size_increase"
             app:layout_constraintHorizontal_bias="0.484"
             app:layout_constraintStart_toEndOf="@id/font_size_decrease"
-            app:layout_constraintTop_toBottomOf="@id/font_size_label" />
+            app:layout_constraintTop_toBottomOf="@id/font_size_label"
+            android:importantForAccessibility="yes"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:contentDescription="Current font size is 24"/>
 
         <Button
             android:id="@+id/font_size_increase"
@@ -188,7 +216,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="8dp"
             android:backgroundTint="@color/button"
-            />
+            android:contentDescription="Increase font size"/>
 
         <!-- Contrast Section -->
         <TextView
@@ -200,7 +228,8 @@
             android:textColor="@color/primaryText"
             app:layout_constraintTop_toBottomOf="@id/font_size_increase"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginTop="16dp"/>
+            android:layout_marginTop="16dp"
+            android:importantForAccessibility="yes"/>
 
         <RadioGroup
             android:id="@+id/contrast_radio_group"
@@ -208,7 +237,8 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintTop_toBottomOf="@id/contrast_label"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            android:contentDescription="Select contrast option">
 
             <RadioButton
                 android:id="@+id/contrast_default"
@@ -217,7 +247,8 @@
                 android:background="@color/button"
                 android:checked="true"
                 android:text="Default"
-                android:textColor="@color/primaryText" />
+                android:textColor="@color/primaryText"
+                android:contentDescription="Default contrast option"/>
 
             <RadioButton
                 android:id="@+id/contrast_white_on_black"
@@ -225,7 +256,8 @@
                 android:layout_height="wrap_content"
                 android:background="@color/button"
                 android:text="White on Black"
-                android:textColor="@color/primaryText" />
+                android:textColor="@color/primaryText"
+                android:contentDescription="White text on black background"/>
 
             <RadioButton
                 android:id="@+id/contrast_black_on_white"
@@ -233,7 +265,8 @@
                 android:layout_height="wrap_content"
                 android:background="@color/button"
                 android:text="Black on White"
-                android:textColor="@color/primaryText" />
+                android:textColor="@color/primaryText"
+                android:contentDescription="Black text on white background"/>
         </RadioGroup>
 
         <!-- Difficulty Section -->
@@ -246,7 +279,8 @@
             android:textColor="@color/primaryText"
             app:layout_constraintTop_toBottomOf="@id/contrast_radio_group"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginTop="16dp"/>
+            android:layout_marginTop="16dp"
+            android:importantForAccessibility="yes"/>
 
         <RadioGroup
             android:id="@+id/difficulty_radio_group"
@@ -254,7 +288,8 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             app:layout_constraintTop_toBottomOf="@id/difficulty_label"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            android:contentDescription="Select difficulty level">
 
             <RadioButton
                 android:id="@+id/difficulty_easy"
@@ -262,7 +297,8 @@
                 android:layout_height="wrap_content"
                 android:text="Easy"
                 android:textColor="@color/primaryText"
-                android:background="@color/button"/>
+                android:background="@color/button"
+                android:contentDescription="Easy difficulty level"/>
 
             <RadioButton
                 android:id="@+id/difficulty_medium"
@@ -271,7 +307,8 @@
                 android:text="Medium"
                 android:checked="true"
                 android:textColor="@color/primaryText"
-                android:background="@color/button"/>
+                android:background="@color/button"
+                android:contentDescription="Medium difficulty level"/>
 
             <RadioButton
                 android:id="@+id/difficulty_hard"
@@ -279,7 +316,8 @@
                 android:layout_height="wrap_content"
                 android:text="Hard"
                 android:textColor="@color/primaryText"
-                android:background="@color/button"/>
+                android:background="@color/button"
+                android:contentDescription="Hard difficulty level"/>
         </RadioGroup>
 
         <!-- Language Selection -->
@@ -292,7 +330,8 @@
             android:textSize="16sp"
             app:layout_constraintTop_toBottomOf="@id/difficulty_radio_group"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginTop="16dp"/>
+            android:layout_marginTop="16dp"
+            android:importantForAccessibility="yes"/>
 
         <Spinner
             android:id="@+id/language_spinner"
@@ -303,7 +342,8 @@
             android:entries="@array/language_levels"
             android:minHeight="48dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/localization_label" />
+            app:layout_constraintTop_toBottomOf="@id/localization_label"
+            android:contentDescription="Select language"/>
 
         <!-- Reset Settings -->
         <Button
@@ -316,8 +356,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="32dp"
-            android:layout_marginBottom="16dp"/>
-
+            android:layout_marginBottom="16dp"
+            android:contentDescription="Reset all settings to default"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </ScrollView>
