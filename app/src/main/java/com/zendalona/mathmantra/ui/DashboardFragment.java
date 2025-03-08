@@ -43,9 +43,9 @@ public class DashboardFragment extends Fragment {
         binding.angleButton.setOnClickListener(v -> {
             if (navigationListener != null) navigationListener.loadFragment(new AngleFragment(),FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         });
-//        binding.ttsCv.setOnClickListener(v -> {
-//            if (navigationListener != null) navigationListener.loadFragment(new ChooseLessonFragment(),FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-//        });
+        binding.drawingButton.setOnClickListener(v -> {
+            if (navigationListener != null) navigationListener.loadFragment(new DrawingFragment(),FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        });
         binding.mcqCv.setOnClickListener(v -> {
             if (navigationListener != null) navigationListener.loadFragment(new MCQFragment(),FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         });
