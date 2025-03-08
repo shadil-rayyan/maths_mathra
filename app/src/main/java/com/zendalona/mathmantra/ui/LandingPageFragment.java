@@ -61,7 +61,7 @@ public class LandingPageFragment extends Fragment {
 
         binding.settingsButton.setOnClickListener(v -> {
             if (navigationListener != null) {
-//                navigationListener.loadFragment(new SettingsFragment(), FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                navigationListener.loadFragment(new SettingFragment(), FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
             }
         });
 

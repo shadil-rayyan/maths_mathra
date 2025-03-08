@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Contrast Mode Options -->
+    <string-array name="language_levels">
+        <item>english</item>
+        <item>spanish</item>
+        <item>french</item>
+        <!-- Add other languages -->
+    </string-array>
+
+    <!-- Difficulty Level Options -->
+    <string-array name="difficulty_levels">
+        <item>Easy</item>
+        <item>Medium</item>
+        <item>Hard</item>
+    </string-array>
+</resources>
