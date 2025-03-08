@@ -56,6 +56,9 @@ public class DashboardFragment extends Fragment {
         binding.numberLineCv.setOnClickListener(v -> {
             if (navigationListener != null) navigationListener.loadFragment(new NumberLineFragment(),FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         });
+        binding.stereoSoundButton.setOnClickListener(v -> {
+            if (navigationListener != null) navigationListener.loadFragment(new SoundFragment(),FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        });
 
         return binding.getRoot();
     }
