@@ -1,75 +1,125 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
     android:background="@color/background"
-    tools:context=".ui.SoundFragment"
-    android:focusable="true"
-    android:focusableInTouchMode="true"
-    android:contentDescription="Sound-based math quiz. Solve the math problem by listening carefully and entering your answer.">
+    android:padding="16dp">
 
+    <!-- Title -->
+    <TextView
+        android:id="@+id/title_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="What is"
+        android:textSize="32sp"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp"/>
+
+    <!-- First Number Row -->
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:padding="50dp"
-        android:focusable="true"
-        android:focusableInTouchMode="true">
+        android:id="@+id/firstNumberLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center">
 
-        <!-- Instruction Text -->
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/question_tv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Listen carefully and subtract the first number you hear from the second number."
-            android:textSize="24sp"
-            android:layout_margin="10dp"
-            android:textColor="@color/primaryText"
-            android:importantForAccessibility="yes"
-            android:contentDescription="Instruction. Listen carefully. Tap 'Read the Question' to hear the numbers before solving." />
+        <TextView
+            android:id="@+id/first_digit_1"
+            style="@style/NumberBox"/>
 
-        <!-- Read Question Button -->
+        <TextView
+            android:id="@+id/first_digit_2"
+            style="@style/NumberBox"/>
 
-        <!-- Answer Input Field -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_margin="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:boxBackgroundMode="outline"
-            android:textColor="@color/primaryText"
-            app:boxBackgroundColor="@color/background"
-            android:importantForAccessibility="yes"
-            android:contentDescription="Answer input field. Type your answer here.">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/answer_et"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Your Answer Here"
-                android:textColorHint="@color/primaryText"
-                android:textColor="@color/primaryText"
-                android:backgroundTint="@color/primaryText"
-                android:importantForAccessibility="yes"
-                android:inputType="number"
-                android:contentDescription="Enter your answer in numbers only. Example: 5 or 10."/>
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- Submit Button -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/submit_answer_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:textSize="24sp"
-            android:text="Submit"
-            android:textColor="@color/primaryText"
-            android:backgroundTint="@color/button"
-            android:importantForAccessibility="yes"
-            android:contentDescription="Submit button. Double tap to submit your answer." />
+        <TextView
+            android:id="@+id/first_digit_3"
+            style="@style/NumberBox"/>
     </LinearLayout>
 
-</FrameLayout>
+    <!-- Operator -->
+    <TextView
+        android:id="@+id/operator_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="+"
+        android:textSize="32sp"
+        android:textColor="@color/white"
+        android:layout_marginVertical="8dp"
+        android:layout_gravity="center"/>
+
+    <!-- Second Number Row -->
+    <LinearLayout
+        android:id="@+id/secondNumberLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center">
+
+        <TextView
+            android:id="@+id/second_digit_1"
+            style="@style/NumberBox"/>
+
+        <TextView
+            android:id="@+id/second_digit_2"
+            style="@style/NumberBox"/>
+
+        <TextView
+            android:id="@+id/second_digit_3"
+            style="@style/NumberBox"/>
+    </LinearLayout>
+
+    <!-- Horizontal Line -->
+    <View
+        android:layout_width="120dp"
+        android:layout_height="2dp"
+        android:background="@color/white"
+        android:layout_marginVertical="8dp"
+        android:layout_gravity="center"/>
+
+    <!-- Answer Row (Editable Fields) -->
+    <LinearLayout
+        android:id="@+id/resultNumberLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center">
+
+        <EditText
+            android:id="@+id/result_digit_1"
+            style="@style/NumberBox"
+            android:inputType="number"
+            android:hint="0"
+            android:importantForAccessibility="yes"/>
+
+        <EditText
+            android:id="@+id/result_digit_2"
+            style="@style/NumberBox"
+            android:inputType="number"
+            android:hint="0"
+            android:importantForAccessibility="yes"/>
+
+        <EditText
+            android:id="@+id/result_digit_3"
+            style="@style/NumberBox"
+            android:inputType="number"
+            android:hint="0"
+            android:importantForAccessibility="yes"/>
+    </LinearLayout>
+
+    <!-- Submit Button -->
+    <Button
+        android:id="@+id/submit_btn"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:text="Submit"
+        android:textSize="18sp"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/button"
+        android:layout_marginTop="16dp"
+        android:layout_gravity="center"/>
+</LinearLayout>
