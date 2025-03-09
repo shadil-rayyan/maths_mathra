@@ -36,36 +36,35 @@ public class LearningPageFragment extends Fragment {
         binding = FragmentLearningmodeBinding.inflate(inflater, container, false);
 
         binding.cardTime.setOnClickListener(v -> {
-            // TODO: Implement what happens when Time is clicked
-            // Example: navigate to Time learning fragment (if applicable)
+            navigationListener.loadFragment(new TimeFragment(), FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         });
 
         binding.cardCurrency.setOnClickListener(v -> {
-            // TODO: Implement what happens when Currency is clicked
+            navigationListener.loadFragment(new CurrencyFragment(), FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         });
 
         binding.cardDistance.setOnClickListener(v -> {
-            // TODO: Implement what happens when Distance is clicked
+            navigationListener.loadFragment(new DistanceFragment(), FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         });
 
         binding.cardAddition.setOnClickListener(v -> {
-            // TODO: Implement what happens when Arithmetic is clicked
+            navigationListener.loadFragment(new AdditionFragment(), FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         });
 
         binding.cardSubtraction.setOnClickListener(v -> {
-            // TODO: Implement what happens when Subtraction is clicked
+            navigationListener.loadFragment(new SubtractionFragment(), FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         });
 
         binding.cardMultiplication.setOnClickListener(v -> {
-            // TODO: Implement what happens when Multiplication is clicked
+            navigationListener.loadFragment(new MultiplicationFragment(), FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         });
 
         binding.cardDivision.setOnClickListener(v -> {
-            // TODO: Implement what happens when Division is clicked
+            navigationListener.loadFragment(new DivisionFragment(), FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         });
 
         binding.cardTilerFrame.setOnClickListener(v -> {
-            // TODO: Implement what happens when Tiler Frame is clicked
+            navigationListener.loadFragment(new TilerFrameFragment(), FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         });
 
         return binding.getRoot();

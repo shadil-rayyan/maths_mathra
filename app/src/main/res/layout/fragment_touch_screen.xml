@@ -13,18 +13,33 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:gravity="center"
-        android:padding="50dp">
+        android:padding="20dp">
 
-        <!-- Instruction Text -->
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/finger_instruction"
-            android:layout_width="match_parent"
+        <!-- Angle Question TextView -->
+
+        <!-- ImageView (Rotate Phone Animation) -->
+
+        <TextView
+            android:id="@+id/angle_question"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="24sp"
-            android:layout_margin="10dp"
+            android:layout_marginTop="20dp"
+            android:text="put 2 finger in the screen"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:textColor="@color/primaryText"
-            android:gravity="center"
-            android:contentDescription="Instruction to touch screen with X fingers" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/title_text" />
+
+        <ImageView
+            android:id="@+id/animated_view"
+            android:layout_width="138dp"
+            android:layout_height="127dp"
+            android:layout_marginTop="30dp"
+            android:src="@drawable/touchthescreen"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/angle_question" />
 
     </LinearLayout>
 

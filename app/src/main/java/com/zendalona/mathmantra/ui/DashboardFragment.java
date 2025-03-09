@@ -59,6 +59,12 @@ public class DashboardFragment extends Fragment {
         binding.stereoSoundButton.setOnClickListener(v -> {
             if (navigationListener != null) navigationListener.loadFragment(new SoundFragment(),FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         });
+        binding.mentalCalculationButton.setOnClickListener(v -> {
+            if (navigationListener != null) navigationListener.loadFragment(new MentalCalculationFragment(),FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        });
+        binding.touchTheScreenButton.setOnClickListener(v -> {
+            if (navigationListener != null) navigationListener.loadFragment(new TouchScreenFragment(),FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        });
 
         return binding.getRoot();
     }
