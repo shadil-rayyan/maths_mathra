@@ -22,7 +22,6 @@ import com.zendalona.mathmantra.databinding.DialogResultBinding;
 import com.zendalona.mathmantra.databinding.FragmentTilerFrameBinding;
 
 import java.util.Random;
-
 public class TilerFrameFragment extends Fragment {
 
     private FragmentTilerFrameBinding binding;
@@ -78,13 +77,16 @@ public class TilerFrameFragment extends Fragment {
     private void displayNumbers() {
         binding.firstNumberLayout.removeAllViews();
         binding.secondNumberLayout.removeAllViews();
-        binding.resultNumberLayout.removeAllViews();  // Fix: Correct ID used
+        binding.resultNumberLayout.removeAllViews();
 
         setNumberBoxes(binding.firstNumberLayout, num1, false);
         setNumberBoxes(binding.secondNumberLayout, num2, false);
         setNumberBoxes(binding.resultNumberLayout, correctAnswer, true);
 
-        binding.operatorTv.setText(String.valueOf(operator));  // Fix: Ensure `operatorTv` is correctly referenced
+        binding.operatorTv.setText(String.valueOf(operator));
+
+        // Make sure focus is set to the result field after new question
+        binding.resultNumberLayout.getChildAt(0).requestFocus();
     }
 
     private void setNumberBoxes(LinearLayout layout, int number, boolean isInput) {
@@ -97,9 +99,10 @@ public class TilerFrameFragment extends Fragment {
                 inputBox.setLayoutParams(params);
                 inputBox.setTextSize(24);
                 inputBox.setHint("_");
-                inputBox.setGravity(android.view.Gravity.CENTER); // Fix: Correct gravity setting
+                inputBox.setGravity(android.view.Gravity.CENTER);
                 inputBox.setTextColor(ContextCompat.getColor(requireContext(), R.color.white));
                 inputBox.setBackgroundResource(R.drawable.number_box);
+                inputBox.setContentDescription("Enter digit " + digit);
                 layout.addView(inputBox);
             } else {
                 TextView textBox = new TextView(getContext());
@@ -108,9 +111,10 @@ public class TilerFrameFragment extends Fragment {
                 textBox.setLayoutParams(params);
                 textBox.setTextSize(24);
                 textBox.setText(String.valueOf(digit));
-                textBox.setGravity(android.view.Gravity.CENTER); // Fix: Proper gravity setting
+                textBox.setGravity(android.view.Gravity.CENTER);
                 textBox.setTextColor(ContextCompat.getColor(requireContext(), R.color.white));
                 textBox.setBackgroundResource(R.drawable.number_box);
+                textBox.setContentDescription("Digit " + digit);
                 layout.addView(textBox);
             }
         }
@@ -118,12 +122,12 @@ public class TilerFrameFragment extends Fragment {
 
     private void checkAnswer() {
         StringBuilder userAnswerStr = new StringBuilder();
-        for (int i = 0; i < binding.resultNumberLayout.getChildCount(); i++) {  // Fix: Use correct ID
+        for (int i = 0; i < binding.resultNumberLayout.getChildCount(); i++) {
             View view = binding.resultNumberLayout.getChildAt(i);
             if (view instanceof EditText) {
                 String input = ((EditText) view).getText().toString().trim();
                 if (input.isEmpty()) {
-                    userAnswerStr.append("0"); // Default to zero if empty
+                    userAnswerStr.append("0");
                 } else {
                     userAnswerStr.append(input);
                 }
