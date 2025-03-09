@@ -6,10 +6,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    tools:context=".ui.SoundFragment"
+    tools:context=".ui.TimeFragment"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    android:contentDescription="Sound-based math quiz. Solve the math problem by listening carefully and entering your answer.">
+    android:contentDescription="Math quiz on time-based problems. Answer the given question.">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -25,14 +25,13 @@
             android:id="@+id/question_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text=" “{Emma} studied for {h} hours in the morning and {m} more hours in the evening. How many hours did she study in total?” "
             android:textSize="24sp"
             android:layout_margin="10dp"
             android:textColor="@color/primaryText"
             android:importantForAccessibility="yes"
-            android:contentDescription="Instruction. Listen carefully. Tap 'Read the Question' to hear the numbers before solving." />
-
-        <!-- Read Question Button -->
+            android:contentDescription="Math question will be displayed here. Listen carefully."
+            android:focusable="true"
+            android:focusableInTouchMode="true"/>
 
         <!-- Answer Input Field -->
         <com.google.android.material.textfield.TextInputLayout

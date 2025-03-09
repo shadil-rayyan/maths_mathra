@@ -7,6 +7,8 @@ import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.accessibility.AccessibilityEvent;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -52,15 +54,23 @@ public class CurrencyFragment extends Fragment {
         // Set the question text
         String question = name + " had ₹" + p + ". He earned ₹" + q + " more. How much money does he have now?";
         binding.questionTv.setText(question);
-        binding.answerEt.setText(""); // Clear input field
+        binding.questionTv.setContentDescription("Question: " + question); // TalkBack reads this
+        binding.questionTv.sendAccessibilityEvent(AccessibilityEvent.TYPE_ANNOUNCEMENT);
+
+        // Clear input field
+        binding.answerEt.setText("");
+        binding.answerEt.setHint("Enter your answer here");
+        binding.answerEt.setContentDescription("Enter your answer in numbers only. Example: 100 or 150.");
     }
 
     private void checkAnswer() {
         try {
             int userAnswer = Integer.parseInt(binding.answerEt.getText().toString());
-            showResultDialog(userAnswer == correctAnswer);
+            boolean isCorrect = userAnswer == correctAnswer;
+            showResultDialog(isCorrect);
         } catch (NumberFormatException e) {
             binding.answerEt.setError("Please enter a valid number");
+            Toast.makeText(getContext(), "Please enter a valid number", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -79,6 +89,7 @@ public class CurrencyFragment extends Fragment {
                 .into(dialogBinding.gifImageView);
 
         dialogBinding.messageTextView.setText(message);
+        dialogBinding.messageTextView.setContentDescription(message); // TalkBack will read this
 
         AlertDialog dialog = new AlertDialog.Builder(requireContext())
                 .setView(dialogView)
@@ -86,6 +97,9 @@ public class CurrencyFragment extends Fragment {
                 .create();
 
         dialog.show();
+
+        // Announce the result
+        dialogView.sendAccessibilityEvent(AccessibilityEvent.TYPE_ANNOUNCEMENT);
 
         // Dismiss after 3 seconds and generate a new question
         new Handler(Looper.getMainLooper()).postDelayed(() -> {

@@ -7,13 +7,17 @@ import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
 import com.bumptech.glide.Glide;
 import com.zendalona.mathmantra.R;
 import com.zendalona.mathmantra.databinding.DialogResultBinding;
 import com.zendalona.mathmantra.databinding.FragmentTimeBinding;
+
 import java.util.Random;
 
 public class TimeFragment extends Fragment {
@@ -35,6 +39,12 @@ public class TimeFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentTimeBinding.inflate(inflater, container, false);
+
+        // Ensuring TalkBack reads this fragment when it loads
+        binding.getRoot().setFocusable(true);
+        binding.getRoot().setFocusableInTouchMode(true);
+        binding.getRoot().requestFocus();
+
         generateNewQuestion();
         return binding.getRoot();
     }
@@ -50,12 +60,18 @@ public class TimeFragment extends Fragment {
 
         binding.answerEt.setText("");
         binding.questionTv.setText(question);
+        binding.questionTv.setContentDescription("Question: " + question); // Ensures TalkBack reads the question properly
+
         binding.submitAnswerBtn.setOnClickListener(v -> checkAnswer(totalHours));
     }
 
     private void checkAnswer(int correctAnswer) {
         String userInput = binding.answerEt.getText().toString().trim();
-        if (userInput.isEmpty()) return;
+        if (userInput.isEmpty()) {
+            binding.answerEt.setError("Please enter a valid number");
+            Toast.makeText(requireContext(), "Please enter a valid number", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         boolean isCorrect = Integer.parseInt(userInput) == correctAnswer;
         showResultDialog(isCorrect);
@@ -71,6 +87,7 @@ public class TimeFragment extends Fragment {
 
         Glide.with(this).asGif().load(gifResource).into(dialogBinding.gifImageView);
         dialogBinding.messageTextView.setText(message);
+        dialogBinding.messageTextView.setContentDescription("Result: " + message); // TalkBack support
 
         AlertDialog dialog = new AlertDialog.Builder(requireContext())
                 .setView(dialogView)
