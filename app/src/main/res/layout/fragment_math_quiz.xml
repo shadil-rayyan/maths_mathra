@@ -25,7 +25,18 @@
             android:textColor="@color/primaryText"
             android:contentDescription="Instruction. Calculate the value of the following equation." />
 
-
+        <!-- Math Question -->
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/question_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="2 + 2 = ?"
+            android:textColor="@color/primaryText"
+            android:layout_margin="10dp"
+            android:textSize="48sp"
+            android:focusable="true"
+            android:clickable="true"
+            android:contentDescription="Math question. 2 plus 2 equals what? Double tap to repeat the question." />
 
         <!-- Answer Input Field -->
         <com.google.android.material.textfield.TextInputLayout

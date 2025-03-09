@@ -22,10 +22,10 @@
 
         <!-- Instruction Text -->
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/instruction_text"
+            android:id="@+id/question_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Listen carefully and subtract the first number you hear from the second number."
+            android:text=" “{Emma} studied for {h} hours in the morning and {m} more hours in the evening. How many hours did she study in total?” "
             android:textSize="24sp"
             android:layout_margin="10dp"
             android:textColor="@color/primaryText"

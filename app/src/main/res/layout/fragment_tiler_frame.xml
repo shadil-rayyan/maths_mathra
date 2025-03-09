@@ -22,7 +22,7 @@
 
         <!-- Instruction Text -->
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/instruction_text"
+            android:id="@+id/question_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Listen carefully and subtract the first number you hear from the second number."
