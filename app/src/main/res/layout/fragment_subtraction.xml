@@ -6,10 +6,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    tools:context=".ui.SoundFragment"
+    tools:context=".ui.SubtractionFragment"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    android:contentDescription="Sound-based math quiz. Solve the math problem by listening carefully and entering your answer.">
+    android:contentDescription="Subtraction-based math quiz. Solve the problem and enter your answer.">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,19 +20,17 @@
         android:focusable="true"
         android:focusableInTouchMode="true">
 
-        <!-- Instruction Text -->
+        <!-- Question Text -->
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/question_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Listen carefully and subtract the first number you hear from the second number."
+            android:text="A bookshelf had 30 books. 12 books were borrowed. How many books are left on the shelf?"
             android:textSize="24sp"
             android:layout_margin="10dp"
             android:textColor="@color/primaryText"
             android:importantForAccessibility="yes"
-            android:contentDescription="Instruction. Listen carefully. Tap 'Read the Question' to hear the numbers before solving." />
-
-        <!-- Read Question Button -->
+            android:contentDescription="Subtraction question display." />
 
         <!-- Answer Input Field -->
         <com.google.android.material.textfield.TextInputLayout
@@ -43,7 +41,7 @@
             android:textColor="@color/primaryText"
             app:boxBackgroundColor="@color/background"
             android:importantForAccessibility="yes"
-            android:contentDescription="Answer input field. Type your answer here.">
+            android:contentDescription="Answer input field. Type your answer in numbers.">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/answer_et"
@@ -55,7 +53,7 @@
                 android:backgroundTint="@color/primaryText"
                 android:importantForAccessibility="yes"
                 android:inputType="number"
-                android:contentDescription="Enter your answer in numbers only. Example: 5 or 10."/>
+                android:contentDescription="Enter your answer in numbers only. Example: 18 or 25."/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Submit Button -->
@@ -69,7 +67,6 @@
             android:textColor="@color/primaryText"
             android:backgroundTint="@color/button"
             android:importantForAccessibility="yes"
-            android:contentDescription="Submit button. Double tap to submit your answer." />
+            android:contentDescription="Submit button. Tap to check your answer." />
     </LinearLayout>
-
 </FrameLayout>
