@@ -19,6 +19,8 @@
         android:textColor="@color/white"
         android:textStyle="bold"
         android:layout_marginBottom="16dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:contentDescription="Title: What is the result of the operation?" />
 
     <!-- First Number Row -->

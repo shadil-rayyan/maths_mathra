@@ -59,7 +59,7 @@
             android:focusable="false"
             android:text="Tap to play!"
             android:textColor="@color/primaryText"
-            android:textSize="48sp"
+            android:textSize="28sp"
             android:textAlignment="center"
             android:contentDescription="Instruction: Double tap the tabla above to play the drum sound."
             app:layout_constraintBottom_toTopOf="@+id/mole_up_siv"

@@ -36,7 +36,9 @@
             android:textSize="48sp"
             android:focusable="true"
             android:clickable="true"
+            android:accessibilityLiveRegion="polite"
             android:contentDescription="Math question. 2 plus 2 equals what? Double tap to repeat the question." />
+
 
         <!-- Answer Input Field -->
         <com.google.android.material.textfield.TextInputLayout

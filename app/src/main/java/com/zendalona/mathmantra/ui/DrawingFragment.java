@@ -63,10 +63,21 @@ public class DrawingFragment extends Fragment {
         // Randomly choose "triangle" or "rectangle"
         currentShape = new Random().nextBoolean() ? "triangle" : "rectangle";
         String instruction = "Draw a " + currentShape;
+
+        // Update TextView and Content Description
         binding.questionText.setText(instruction);
+        String questionDescription = "Drawing task. " + instruction + ". Use touch gestures to draw.";
+        binding.questionText.setContentDescription(questionDescription);
+
+        // Announce the updated instruction for TalkBack
+        binding.questionText.post(() -> binding.questionText.announceForAccessibility(questionDescription));
+
+        // Clear the drawing canvas
         drawingView.clearCanvas();
-        announce(instruction);
     }
+
+
+
 
     private void checkDrawing() {
         boolean isCorrect = drawingView.isShapeCorrect(currentShape);

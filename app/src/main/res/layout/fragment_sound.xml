@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -6,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    tools:context=".ui.SoundFragment"
     android:focusable="true"
     android:focusableInTouchMode="true"
     android:contentDescription="Sound-based math quiz. Solve the math problem by listening carefully and entering your answer.">
@@ -30,7 +28,8 @@
             android:layout_margin="10dp"
             android:textColor="@color/primaryText"
             android:importantForAccessibility="yes"
-            android:contentDescription="Instruction. Listen carefully. Tap 'Read the Question' to hear the numbers before solving." />
+            android:contentDescription="Instruction. Listen carefully. Tap 'Read the Question' to hear the numbers before solving."
+            android:accessibilityLiveRegion="polite"/>
 
         <!-- Read Question Button -->
         <com.google.android.material.button.MaterialButton
@@ -54,7 +53,9 @@
             android:textColor="@color/primaryText"
             app:boxBackgroundColor="@color/background"
             android:importantForAccessibility="yes"
-            android:contentDescription="Answer input field. Type your answer here.">
+            android:contentDescription="Answer input field. Type your answer here."
+            android:hint="Enter your answer"
+            android:labelFor="@id/answer_et">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/answer_et"
@@ -66,7 +67,8 @@
                 android:backgroundTint="@color/primaryText"
                 android:importantForAccessibility="yes"
                 android:inputType="number"
-                android:contentDescription="Enter your answer in numbers only. Example: 5 or 10."/>
+                android:contentDescription="Enter your answer in numbers only. Example: 5 or 10."
+                android:accessibilityLiveRegion="polite"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Submit Button -->

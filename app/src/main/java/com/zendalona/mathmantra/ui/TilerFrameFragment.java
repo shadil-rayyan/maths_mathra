@@ -39,6 +39,14 @@ public class TilerFrameFragment extends Fragment {
 
         binding.submitBtn.setOnClickListener(v -> checkAnswer());
 
+        // Ensure TalkBack starts from the "What is" title
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            if (binding.titleTv != null) {
+                binding.titleTv.setAccessibilityLiveRegion(View.ACCESSIBILITY_LIVE_REGION_POLITE);
+                binding.titleTv.announceForAccessibility(binding.titleTv.getText().toString());
+            }
+        }, 500); // Delay to ensure layout is ready
+
         return binding.getRoot();
     }
 
@@ -91,7 +99,11 @@ public class TilerFrameFragment extends Fragment {
 
     private void setNumberBoxes(LinearLayout layout, int number, boolean isInput) {
         String numStr = String.valueOf(number);
-        for (char digit : numStr.toCharArray()) {
+
+        for (int i = 0; i < numStr.length(); i++) {
+            char digit = numStr.charAt(i);
+            final int boxIndex = i + 1; // Final variable to capture box number
+
             if (isInput) {
                 EditText inputBox = new EditText(getContext());
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(100, 120);
@@ -102,7 +114,28 @@ public class TilerFrameFragment extends Fragment {
                 inputBox.setGravity(android.view.Gravity.CENTER);
                 inputBox.setTextColor(ContextCompat.getColor(requireContext(), R.color.white));
                 inputBox.setBackgroundResource(R.drawable.number_box);
-                inputBox.setContentDescription("Enter digit " + digit);
+
+                // Set initial content description
+                inputBox.setContentDescription("Answer box " + boxIndex + ", currently empty");
+
+                // Listen for text changes to update content description
+                inputBox.addTextChangedListener(new android.text.TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        if (s.length() > 0) {
+                            inputBox.setContentDescription("Answer box " + boxIndex + ", entered " + s);
+                        } else {
+                            inputBox.setContentDescription("Answer box " + boxIndex + ", currently empty");
+                        }
+                    }
+
+                    @Override
+                    public void afterTextChanged(android.text.Editable s) {}
+                });
+
                 layout.addView(inputBox);
             } else {
                 TextView textBox = new TextView(getContext());
@@ -119,6 +152,7 @@ public class TilerFrameFragment extends Fragment {
             }
         }
     }
+
 
     private void checkAnswer() {
         StringBuilder userAnswerStr = new StringBuilder();

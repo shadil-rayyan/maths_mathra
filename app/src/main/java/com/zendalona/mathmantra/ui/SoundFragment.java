@@ -7,6 +7,7 @@ import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 import com.bumptech.glide.Glide;
 import com.zendalona.mathmantra.R;
@@ -22,7 +23,7 @@ public class SoundFragment extends Fragment {
     private RandomValueGenerator random;
     private TTSUtility ttsUtility;
     private int correctAnswer;
-    private int num1, num2; // Store numbers for TTS
+    private int num1, num2;
 
     public SoundFragment() {
         // Required empty public constructor
@@ -40,24 +41,30 @@ public class SoundFragment extends Fragment {
         random = new RandomValueGenerator();
         ttsUtility = new TTSUtility(requireContext());
 
-        // Set accessibility descriptions
         setAccessibilityDescriptions();
 
-        generateNewQuestion(); // Generate question but don't read aloud
+        generateNewQuestion();
 
-        // Read question when button is pressed
         binding.readQuestionBtn.setOnClickListener(v -> {
             readQuestionAloud();
             binding.readQuestionBtn.announceForAccessibility("Reading the math problem aloud.");
+
+            // Move focus to answer field after question is read
+            new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                binding.answerEt.requestFocus();
+                binding.answerEt.announceForAccessibility("Type your answer now.");
+            }, 3000);
         });
 
-        // Submit answer listener
         binding.submitAnswerBtn.setOnClickListener(v -> {
             String userInput = binding.answerEt.getText().toString();
             if (!userInput.isEmpty()) {
-                showResultDialog(Integer.parseInt(userInput) == correctAnswer);
+                boolean isCorrect = Integer.parseInt(userInput) == correctAnswer;
+                showResultDialog(isCorrect);
             } else {
-                binding.submitAnswerBtn.announceForAccessibility("Please enter an answer before submitting.");
+                binding.answerEt.requestFocus();
+                binding.answerEt.announceForAccessibility("Please enter an answer before submitting.");
+                Toast.makeText(requireContext(), "Please enter an answer!", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -65,21 +72,17 @@ public class SoundFragment extends Fragment {
     }
 
     private void generateNewQuestion() {
-        // Generate two numbers for subtraction
         int[] numbers = random.generateSubtractionValues(Difficulty.EASY);
         num1 = numbers[0];
         num2 = numbers[1];
-        correctAnswer = numbers[2]; // Store the correct answer
+        correctAnswer = numbers[2];
 
-        // Clear previous answer
         binding.answerEt.setText("");
 
-        // Announce new question for screen readers
         binding.answerEt.announceForAccessibility("A new question has been generated. Tap 'Read the Question' to listen.");
     }
 
     private void readQuestionAloud() {
-        // Speak instruction and numbers
         ttsUtility.speak("Listen carefully. Subtract the first number you hear from the second number.");
 
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
@@ -88,14 +91,13 @@ public class SoundFragment extends Fragment {
     }
 
     private void showResultDialog(boolean isCorrect) {
-        String message = isCorrect ? "Right Answer" : "Wrong Answer";
+        String message = isCorrect ? "Right Answer!" : "Wrong Answer. Try again.";
         int gifResource = isCorrect ? R.drawable.right : R.drawable.wrong;
 
         LayoutInflater inflater = getLayoutInflater();
         DialogResultBinding dialogBinding = DialogResultBinding.inflate(inflater);
         View dialogView = dialogBinding.getRoot();
 
-        // Load the GIF using Glide
         Glide.with(this)
                 .asGif()
                 .load(gifResource)
@@ -109,11 +111,8 @@ public class SoundFragment extends Fragment {
                 .create();
 
         dialog.show();
-
-        // Announce result for screen readers
         dialogView.announceForAccessibility(message);
 
-        // Automatically dismiss the dialog after 4 seconds and generate a new question
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             if (dialog.isShowing()) {
                 dialog.dismiss();
@@ -123,8 +122,8 @@ public class SoundFragment extends Fragment {
     }
 
     private void setAccessibilityDescriptions() {
-        binding.readQuestionBtn.setContentDescription("Button to read the math question aloud.");
-        binding.answerEt.setContentDescription("Enter your answer here.");
+        binding.readQuestionBtn.setContentDescription("Read question aloud.");
+        binding.answerEt.setContentDescription("Answer field. Enter your answer.");
         binding.submitAnswerBtn.setContentDescription("Submit your answer.");
     }
 }

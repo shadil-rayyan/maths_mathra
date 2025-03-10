@@ -19,6 +19,7 @@ import com.zendalona.mathmantra.databinding.DialogResultBinding;
 import com.zendalona.mathmantra.databinding.FragmentMentalCalculationBinding;
 
 import java.util.Random;
+
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
 
@@ -54,9 +55,13 @@ public class MentalCalculationFragment extends Fragment {
         currentExpression = num1 + " " + op1 + " " + num2 + " " + op2 + " " + num3 + " " + op3 + " " + num4;
         correctAnswer = evaluateExpression(currentExpression);
 
-        binding.mentalCalculation.setText(currentExpression + " = ?");
-        binding.answerEt.setText(""); // Clear previous answer
+        String displayText = currentExpression + " = ?";
+        binding.mentalCalculation.setText(displayText);
+
+        // Update content description for accessibility
+        binding.mentalCalculation.setContentDescription("Math question. " + currentExpression + ". What is the answer?");
     }
+
 
     private int evaluateExpression(String expression) {
         try {

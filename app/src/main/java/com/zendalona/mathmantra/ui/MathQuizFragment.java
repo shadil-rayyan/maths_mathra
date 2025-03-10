@@ -2,6 +2,7 @@ package com.zendalona.mathmantra.ui;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
+import androidx.core.view.ViewCompat; // Import this
 
 import androidx.fragment.app.Fragment;
 
@@ -45,16 +46,24 @@ public class MathQuizFragment extends Fragment {
 
     private void generateNewQuestion() {
         int numbers[] = random.generateAdditionValues(Difficulty.EASY);
-        StringBuilder questionBuilder = new StringBuilder();
-        questionBuilder.append(numbers[0])
-                .append("+")
-                .append(numbers[1])
-                .append(" = ?");
+        String questionText = numbers[0] + " + " + numbers[1] + " = ?";
+
         binding.answerEt.setText("");
-        binding.questionTv.setText(questionBuilder);
-        binding.submitAnswerBtn
-                .setOnClickListener(v -> showResultDialog(Integer.parseInt(binding.answerEt.getText().toString()) == numbers[2]));
+        binding.questionTv.setText(questionText);
+
+        // Update content description to match the new question
+        String questionDescription = "Math question. " + numbers[0] + " plus " + numbers[1] + " equals what? Double tap to repeat the question.";
+        binding.questionTv.setContentDescription(questionDescription);
+
+        // Announce the updated question to TalkBack
+        binding.questionTv.post(() -> binding.questionTv.announceForAccessibility(questionDescription));
+
+        binding.submitAnswerBtn.setOnClickListener(v -> {
+            boolean isCorrect = Integer.parseInt(binding.answerEt.getText().toString()) == numbers[2];
+            showResultDialog(isCorrect);
+        });
     }
+
 
     private void showResultDialog(boolean isCorrect) {
         String message = isCorrect ? "Right Answer" : "Wrong Answer";
