@@ -14,7 +14,8 @@
         android:focusable="false"
         android:clickable="false"
         android:importantForAccessibility="no"
-        android:layout_height="100dp"/>
+        android:layout_height="100dp"
+        android:scaleType="fitCenter"/>
 
     <TextView
         android:id="@+id/messageTextView"

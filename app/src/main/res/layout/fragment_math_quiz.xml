@@ -46,7 +46,8 @@
             android:contentDescription="Enter your answer here"
             app:boxBackgroundMode="outline"
             android:textColor="@color/primaryText"
-            app:boxBackgroundColor="@color/background">
+            app:boxBackgroundColor="@color/background"
+            app:hintEnabled="true">>
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/answer_et"
@@ -55,7 +56,7 @@
                 android:contentDescription="Answer input field. Enter your answer here."
                 android:hint="Your Answer Here"
                 android:textColorHint="@color/primaryText"
-                android:textColor="@color/primaryText"
+                android:textColor="@color/background"
                 android:backgroundTint="@color/primaryText"
                 android:importantForAccessibility="yes"
                 android:inputType="number"

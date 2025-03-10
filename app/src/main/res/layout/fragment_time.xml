@@ -50,7 +50,7 @@
                 android:layout_height="wrap_content"
                 android:hint="Your Answer Here"
                 android:textColorHint="@color/primaryText"
-                android:textColor="@color/primaryText"
+                android:textColor="@color/background"
                 android:backgroundTint="@color/primaryText"
                 android:importantForAccessibility="yes"
                 android:inputType="number"
