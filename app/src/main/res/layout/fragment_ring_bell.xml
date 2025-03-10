@@ -54,7 +54,7 @@
             android:text="Wiggle to Ring!"
             android:textColor="@color/primaryText"
             android:textAlignment="center"
-            android:textSize="48sp"
+            android:textSize="24sp"
             app:layout_constraintBottom_toTopOf="@+id/mole_up_siv"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

@@ -30,24 +30,26 @@
             android:contentDescription="Tap count: 0" />
 
         <!-- Tabla Animation - Main Interactive Element -->
+
+        <!-- Tap to Play Text - Useful for context -->
+
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/tabla_animation_view"
-            android:layout_width="250dp"
-            android:layout_height="250dp"
-            android:layout_marginTop="48dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:contentDescription="Double tap to play the tabla sound. This is the main interactive drum animation."
+            android:layout_width="218dp"
+            android:layout_height="176dp"
+            android:layout_marginTop="112dp"
             android:background="@color/primaryText"
+            android:clickable="true"
+            android:contentDescription="Double tap to play the tabla sound. This is the main interactive drum animation."
+            android:focusable="true"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.503"
+            app:layout_constraintHorizontal_bias="0.549"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:lottie_autoPlay="false"
             app:lottie_loop="false"
             app:lottie_rawRes="@raw/drums" />
 
-        <!-- Tap to Play Text - Useful for context -->
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tap_me_tv"
             android:layout_width="wrap_content"
