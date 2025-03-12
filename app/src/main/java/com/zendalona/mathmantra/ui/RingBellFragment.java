@@ -2,22 +2,17 @@ package com.zendalona.mathmantra.ui;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
-
-import androidx.appcompat.app.ActionBar;
+import android.os.Handler;
 import androidx.fragment.app.Fragment;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.bumptech.glide.Glide;
 import com.zendalona.mathmantra.R;
 import com.zendalona.mathmantra.databinding.DialogResultBinding;
 import com.zendalona.mathmantra.databinding.FragmentRingBellBinding;
 import com.zendalona.mathmantra.utils.AccelerometerUtility;
 import com.zendalona.mathmantra.utils.RandomValueGenerator;
-import com.zendalona.mathmantra.utils.ResponseFeedbackDialog;
 import com.zendalona.mathmantra.utils.SoundEffectUtility;
 import com.zendalona.mathmantra.utils.TTSUtility;
 
@@ -28,7 +23,8 @@ public class RingBellFragment extends Fragment {
     private SoundEffectUtility soundEffectUtility;
     private RandomValueGenerator randomValueGenerator;
     private TTSUtility tts;
-    int count, target;
+    private boolean gameCompleted = false;
+    private int count, target;
 
     public RingBellFragment() {
         // Required empty public constructor
@@ -46,34 +42,53 @@ public class RingBellFragment extends Fragment {
         binding = FragmentRingBellBinding.inflate(inflater, container, false);
         randomValueGenerator = new RandomValueGenerator();
         tts = new TTSUtility(requireContext());
+
         startGame();
         return binding.getRoot();
     }
 
     private void ringBell() {
+        if (gameCompleted) return;
+
         binding.bellAnimationView.playAnimation();
         soundEffectUtility.playSound(R.raw.bell_ring);
-        binding.ringCount.setText(String.valueOf(++count));
-        if(count == target) appreciateUser();
+        count++;
+        binding.ringCount.setText(String.valueOf(count));
+        binding.ringCount.setContentDescription("Shake count: " + count);
+
+        if (count == target) {
+            gameCompleted = true;
+            evaluateGameResult();
+        }
     }
 
-    private void appreciateUser() {
-        String message = "Well done";
-        int gifResource = R.drawable.right;
+    private void evaluateGameResult() {
+        new Handler().postDelayed(() -> {
+            if (count == target) {
+                showSuccessDialog();
+            } else {
+                showFailureDialog();
+            }
+        }, 2000); // Delay check
+    }
 
+    private void showSuccessDialog() {
+        showResultDialog("Well done!", R.drawable.right);
+    }
+
+    private void showFailureDialog() {
+        showResultDialog("Try again!", R.drawable.wrong);
+    }
+
+    private void showResultDialog(String message, int gifResource) {
         LayoutInflater inflater = getLayoutInflater();
         DialogResultBinding dialogBinding = DialogResultBinding.inflate(inflater);
         View dialogView = dialogBinding.getRoot();
 
-        // Load the GIF using Glide
-        Glide.with(this)
-                .asGif()
-                .load(gifResource)
-                .into(dialogBinding.gifImageView);
-
+        Glide.with(this).asGif().load(gifResource).into(dialogBinding.gifImageView);
         dialogBinding.messageTextView.setText(message);
 
-        tts.speak("Well done!, Click on continue!");
+        tts.speak(message + ", Click continue!");
 
         new AlertDialog.Builder(requireContext())
                 .setView(dialogView)
@@ -86,29 +101,32 @@ public class RingBellFragment extends Fragment {
     }
 
     private void startGame() {
+        gameCompleted = false;
         count = 0;
-        binding.ringCount.setText(String.valueOf(count));
+        binding.ringCount.setText("0");
+        binding.bellAnimationView.setVisibility(View.VISIBLE);
         target = randomValueGenerator.generateNumberForCountGame();
-        String targetText = "Ring the bell  " + target + " times by shaking the phone";
+
+        String targetText = "Shake the bell " + target + " times";
         tts.speak(targetText);
         binding.ringMeTv.setText(targetText);
+        binding.ringMeTv.requestFocus();
     }
-
 
     @Override
     public void onResume() {
         super.onResume();
-        // Start a thread to check for shakes
+
         new Thread(() -> {
-            while (isVisible()) {
+            while (isVisible() && !gameCompleted) {
                 try {
-                    Thread.sleep(200);
-                }
-                catch (InterruptedException e) {
-                    Log.d("Accelerometer Thread sleep Error",e.getLocalizedMessage());
+                    Thread.sleep(500); // Prevent multiple shakes
+                    if (accelerometerUtility.isDeviceShaken()) {
+                        requireActivity().runOnUiThread(this::ringBell);
+                    }
+                } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                if (accelerometerUtility.isDeviceShaken()) requireActivity().runOnUiThread(this::ringBell);
             }
         }).start();
     }
@@ -117,6 +135,7 @@ public class RingBellFragment extends Fragment {
     public void onPause() {
         super.onPause();
         accelerometerUtility.unregisterListener();
+        tts.stop(); // Prevent TalkBack from reading previous screen
     }
 
     @Override

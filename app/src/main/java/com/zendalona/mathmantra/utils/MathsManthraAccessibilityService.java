@@ -16,7 +16,7 @@ public class MathsManthraAccessibilityService extends AccessibilityService {
         // Check if the accessibility event is triggered due to a window state change
         if (event.getEventType() == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
             String packageName = event.getPackageName().toString();
-            if ("com.zendalona.zbluff".equals(packageName)) {
+            if ("com.zendalona.mathmantra".equals(packageName)) {
                 Log.d("AAAA onAccessibilityEvent", "WINDOW_STATE_CHANGED " + event);
             }
         }
@@ -24,7 +24,7 @@ public class MathsManthraAccessibilityService extends AccessibilityService {
         // Handle the event when a view receives accessibility focus
         if (event.getEventType() == AccessibilityEvent.TYPE_VIEW_ACCESSIBILITY_FOCUSED) {
             String packageName = event.getPackageName().toString();
-            if ("com.zendalona.zbluff".equals(packageName)) {
+            if ("com.zendalona.mathmantra".equals(packageName)) {
                 Log.d("AAAA onAccessibilityEvent", "TYPE_VIEW_ACCESSIBILITY_FOCUSED " + event);
                 MainActivity.updateWindowState();
             }

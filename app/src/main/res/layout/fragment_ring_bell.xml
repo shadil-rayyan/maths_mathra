@@ -5,77 +5,74 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    tools:context=".ui.RingBellFragment"
-    android:contentDescription="This is the Ring Bell screen. Wiggle your device to ring the bell. The app is fully loaded and ready for interaction.">
+    android:contentDescription="Shake Bell Screen"
+    tools:context=".ui.RingBellFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <!-- Ring Count - Announce current count -->
+        <!-- Ring Count -->
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/ring_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="0"
+            android:textSize="48sp"
+            android:textColor="@color/primaryText"
+            android:focusable="true"
+            android:clickable="false"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="25dp"
             android:layout_marginEnd="25dp"
-            android:text="0"
-            android:textColor="@color/primaryText"
-            android:focusable="false"
-            android:clickable="false"
-            android:textSize="48sp"
-            android:contentDescription="Ring count: 0" />
+            android:contentDescription="Shake count: 0" />
 
-        <!-- Bell Animation - Main interactive element (motion-triggered, so description added) -->
+        <!-- Bell Animation -->
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/bell_animation_view"
             android:layout_width="250dp"
             android:layout_height="250dp"
-            android:layout_marginTop="50dp"
-            app:layout_constraintBottom_toTopOf="@+id/ring_me_tv"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             app:lottie_autoPlay="false"
             app:lottie_loop="false"
             app:lottie_url="https://lottie.host/73320ec9-d502-4622-b2f2-7b207fc88f49/YZfbXweJ34.json"
-            android:contentDescription="Ring bell animation. Shake or wiggle your phone to ring the bell." />
+            android:focusable="false"
+            android:importantForAccessibility="no"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="50dp"
+            android:contentDescription="Shake to ring the bell" />
 
         <!-- Instruction Text -->
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/ring_me_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:clickable="false"
-            android:focusable="false"
-            android:text="Wiggle to Ring!"
+            android:text="Shake Bell!"
+            android:textSize="24sp"
             android:textColor="@color/primaryText"
             android:textAlignment="center"
-            android:textSize="24sp"
-            app:layout_constraintBottom_toTopOf="@+id/mole_up_siv"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:focusable="true"
+            android:importantForAccessibility="yes"
+            app:layout_constraintTop_toBottomOf="@id/bell_animation_view"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginBottom="50dp"
-            android:contentDescription="Instruction: Wiggle your device to ring the bell." />
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="20dp"
+            android:contentDescription="Instruction: Shake your device to ring the bell." />
 
-        <!-- Mole Image (Decorative, but labeled) -->
+        <!-- Decorative Image -->
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/mole_up_siv"
             android:layout_width="200dp"
             android:layout_height="200dp"
-            android:layout_marginTop="30dp"
-            android:clickable="false"
-            android:focusable="false"
             android:src="@drawable/molepointingup"
+            android:focusable="false"
+            android:importantForAccessibility="no"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginBottom="50dp"
-            android:contentDescription="Decorative image: cartoon mole pointing upwards." />
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginBottom="50dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </FrameLayout>
