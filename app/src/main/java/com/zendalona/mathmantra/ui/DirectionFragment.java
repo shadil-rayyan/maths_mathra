@@ -39,6 +39,13 @@ public class DirectionFragment extends Fragment implements SensorEventListener {
     private float targetDirection = 0f;
     private boolean questionAnswered = false;
 
+    private final String[] compassDirections = {
+            "North", "North-Northeast", "Northeast", "East-Northeast",
+            "East", "East-Southeast", "Southeast", "South-Southeast",
+            "South", "South-Southwest", "Southwest", "West-Southwest",
+            "West", "West-Northwest", "Northwest", "North-Northwest"
+    };
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -102,14 +109,14 @@ public class DirectionFragment extends Fragment implements SensorEventListener {
 
         binding.compass.setRotation(rotationDegrees);
 
-        String degreeText = String.format("%.0f°", (rotationDegrees + 360) % 360);
-        binding.degreeText.setText(degreeText);
+        String directionText = getCompassDirection((rotationDegrees + 360) % 360);
+        binding.degreeText.setText(directionText);
 
         // Set accessible content description
-        binding.degreeText.setContentDescription("Current direction " + degreeText);
+        binding.degreeText.setContentDescription("Current direction: " + directionText);
 
-        // Optional: Announce the real-time direction for TalkBack users (can be noisy if left on)
-        binding.degreeText.announceForAccessibility("Current direction " + degreeText);
+        // Announce the real-time direction for TalkBack users
+        binding.degreeText.announceForAccessibility("Current direction: " + directionText);
 
         checkIfCorrect(rotationDegrees);
     }
@@ -119,7 +126,7 @@ public class DirectionFragment extends Fragment implements SensorEventListener {
 
         float difference = Math.abs(targetDirection - ((currentDegrees + 360) % 360));
 
-        if (difference <= 10) {
+        if (difference <= 22.5) { // 22.5 degrees tolerance to match compass points
             questionAnswered = true;
             showResultDialog();
         }
@@ -147,12 +154,19 @@ public class DirectionFragment extends Fragment implements SensorEventListener {
 
     private void generateNewQuestion() {
         targetDirection = random.generateRandomDegree();
+        String targetDirectionText = getCompassDirection(targetDirection);
         questionAnswered = false;
-        String questionText = "Turn to " + (int) targetDirection + "°";
+
+        String questionText = "Turn to " + targetDirectionText;
         binding.questionTv.setText(questionText);
 
         // Announce question to TalkBack
         binding.questionTv.announceForAccessibility(questionText);
+    }
+
+    private String getCompassDirection(float degrees) {
+        int index = (int) ((degrees + 11.25) / 22.5) % 16; // 16 compass points, 22.5° each
+        return compassDirections[index];
     }
 
     @Override
