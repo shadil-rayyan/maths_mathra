@@ -45,27 +45,22 @@ public class SoundFragment extends Fragment {
 
         generateNewQuestion();
 
+        // Auto-focus and play the question on fragment load
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            binding.readQuestionBtn.requestFocus();
+            readQuestionAloud();
+        }, 500);
+
         binding.readQuestionBtn.setOnClickListener(v -> {
             readQuestionAloud();
-            binding.readQuestionBtn.announceForAccessibility("Reading the math problem aloud.");
-
-            // Move focus to answer field after question is read
-            new Handler(Looper.getMainLooper()).postDelayed(() -> {
-                binding.answerEt.requestFocus();
-                binding.answerEt.announceForAccessibility("Type your answer now.");
-            }, 3000);
         });
 
-        binding.submitAnswerBtn.setOnClickListener(v -> {
-            String userInput = binding.answerEt.getText().toString();
-            if (!userInput.isEmpty()) {
-                boolean isCorrect = Integer.parseInt(userInput) == correctAnswer;
-                showResultDialog(isCorrect);
-            } else {
-                binding.answerEt.requestFocus();
-                binding.answerEt.announceForAccessibility("Please enter an answer before submitting.");
-                Toast.makeText(requireContext(), "Please enter an answer!", Toast.LENGTH_SHORT).show();
-            }
+        binding.submitAnswerBtn.setOnClickListener(v -> submitAnswer());
+
+        // Auto-submit on pressing enter
+        binding.answerEt.setOnEditorActionListener((v, actionId, event) -> {
+            submitAnswer();
+            return true;
         });
 
         return binding.getRoot();
@@ -75,7 +70,7 @@ public class SoundFragment extends Fragment {
         int[] numbers = random.generateSubtractionValues(Difficulty.EASY);
         num1 = numbers[0];
         num2 = numbers[1];
-        correctAnswer = numbers[2];
+        correctAnswer = num1 - num2; // Fixing incorrect logic
 
         binding.answerEt.setText("");
 
@@ -83,11 +78,22 @@ public class SoundFragment extends Fragment {
     }
 
     private void readQuestionAloud() {
-        ttsUtility.speak("Listen carefully. Subtract the first number you hear from the second number.");
-
+        ttsUtility.speak("Listen carefully. Subtract the second number from the first number.");
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             ttsUtility.speak("The first number is " + num1 + ". The second number is " + num2 + ".");
         }, 2000);
+    }
+
+    private void submitAnswer() {
+        String userInput = binding.answerEt.getText().toString();
+        if (!userInput.isEmpty()) {
+            boolean isCorrect = Integer.parseInt(userInput) == correctAnswer;
+            showResultDialog(isCorrect);
+        } else {
+            binding.answerEt.requestFocus();
+            binding.answerEt.announceForAccessibility("Please enter an answer before submitting.");
+            Toast.makeText(requireContext(), "Please enter an answer!", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void showResultDialog(boolean isCorrect) {
@@ -118,7 +124,7 @@ public class SoundFragment extends Fragment {
                 dialog.dismiss();
                 generateNewQuestion();
             }
-        }, 4000);
+        }, 2000); // Show for 2 seconds only
     }
 
     private void setAccessibilityDescriptions() {

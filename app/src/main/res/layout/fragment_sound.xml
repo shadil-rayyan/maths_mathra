@@ -7,7 +7,7 @@
     android:background="@color/background"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    android:contentDescription="Sound-based math quiz. Solve the math problem by listening carefully and entering your answer.">
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -23,11 +23,12 @@
             android:id="@+id/instruction_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Listen carefully and subtract the first number you hear from the second number."
+            android:text="Listen carefully and subtract the second number you hear from the first number."
             android:textSize="24sp"
             android:layout_margin="10dp"
             android:textColor="@color/primaryText"
             android:importantForAccessibility="yes"
+
             android:contentDescription="Instruction. Listen carefully. Tap 'Read the Question' to hear the numbers before solving."
             android:accessibilityLiveRegion="polite"/>
 
@@ -42,6 +43,8 @@
             android:textColor="@color/primaryText"
             android:backgroundTint="@color/button"
             android:importantForAccessibility="yes"
+            android:focusableInTouchMode="true"
+            android:focusable="true"
             android:contentDescription="Button to read the math question aloud. Double tap to listen." />
 
         <!-- Answer Input Field -->
