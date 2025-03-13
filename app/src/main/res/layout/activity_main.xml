@@ -12,8 +12,12 @@
         android:background="@color/surface"
         app:title="MathMantra"
         app:titleTextColor="@color/primaryText"
+
         android:importantForAccessibility="no"
         android:focusable="false"
+        android:screenReaderFocusable="false"
+        android:contentDescription="@null"
+        app:titleEnabled="false"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
