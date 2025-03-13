@@ -35,8 +35,9 @@
             android:layout_margin="10dp"
             android:textSize="48sp"
             android:focusable="true"
+            android:focusableInTouchMode="true"
             android:clickable="true"
-            android:contentDescription="Question. What is 2 plus 2? Double tap to repeat. there are 4 option are below select any one of them" />
+            android:contentDescription="Question. What is 2 plus 2? Double tap to repeat. There are four options below." />
 
         <!-- First Row of Options -->
         <LinearLayout
