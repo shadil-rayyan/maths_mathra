@@ -2,7 +2,8 @@ package com.zendalona.mathmantra.ui;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
-import android.view.GestureDetector;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -30,11 +31,10 @@ public class NumberLineFragment extends Fragment {
     private NumberLineViewModel viewModel;
     private TTSUtility tts;
     private RandomValueGenerator random;
-    private final String CURRENT_POSITION = "You're standing on number : \n";
+    private final String CURRENT_POSITION = "You're standing on number : ";
     private int answer;
     private String questionDesc = "";
     private String correctAnswerDesc = "";
-
     private boolean talkBackEnabled = false;
     private float initialX = 0;
     private boolean isTwoFingerSwipe = false;
@@ -55,6 +55,12 @@ public class NumberLineFragment extends Fragment {
         super.onResume();
         viewModel.reset();
         binding.numberLineView.onResume();
+
+        if (talkBackEnabled) {
+            new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                tts.speak("What is " + binding.numberLineQuestion.getText() + "? Swipe left or right to change.");
+            }, 4000);
+        }
     }
 
     @Override
@@ -66,10 +72,8 @@ public class NumberLineFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentNumberLineBinding.inflate(inflater, container, false);
-
         random = new RandomValueGenerator();
         setupObservers();
-
         correctAnswerDesc = askNewQuestion(0);
 
         binding.numberLineQuestion.setOnClickListener(v -> tts.speak(questionDesc));
@@ -77,7 +81,6 @@ public class NumberLineFragment extends Fragment {
         binding.btnRight.setOnClickListener(v -> moveRight());
 
         setupTouchListener();
-
         return binding.getRoot();
     }
 
@@ -85,7 +88,7 @@ public class NumberLineFragment extends Fragment {
         binding.getRoot().setOnTouchListener((v, event) -> {
             if (talkBackEnabled) {
                 handleTwoFingerSwipe(event);
-                return true; // Consume event in TalkBack mode
+                return true;
             }
             return false;
         });
@@ -105,13 +108,16 @@ public class NumberLineFragment extends Fragment {
                     float currentX = (event.getX(0) + event.getX(1)) / 2;
                     float deltaX = currentX - initialX;
 
-                    if (Math.abs(deltaX) > 100) { // Adjust threshold as needed
+                    if (Math.abs(deltaX) > 100) {
                         if (deltaX > 0) {
                             moveRight();
                         } else {
                             moveLeft();
                         }
-                        isTwoFingerSwipe = false; // Consume gesture
+                        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                            tts.speak("You're standing on " + viewModel.currentPosition.getValue() + ". Swipe left or right.");
+                        }, 300);
+                        isTwoFingerSwipe = false;
                     }
                 }
                 break;
@@ -137,84 +143,46 @@ public class NumberLineFragment extends Fragment {
     private String askNewQuestion(int position) {
         Topic topic = random.generateNumberLineQuestion() ? Topic.ADDITION : Topic.SUBTRACTION;
         int unitsToMove = random.generateNumberForCountGame();
-        String operator = " plus ";
-        String direction = " right ";
+        String operator = (topic == Topic.ADDITION) ? " plus " : " minus ";
+        String direction = (topic == Topic.ADDITION) ? " right " : " left ";
+        answer = (topic == Topic.ADDITION) ? position + unitsToMove : position - unitsToMove;
 
-        Map<String, String> operatorMap = new HashMap<>();
-        operatorMap.put("plus", "+");
-        operatorMap.put("minus", "-");
-
-        switch (topic) {
-            case ADDITION:
-                operator = " plus ";
-                direction = " right ";
-                answer = position + unitsToMove;
-                break;
-            case SUBTRACTION:
-                operator = " minus ";
-                direction = " left ";
-                answer = position - unitsToMove;
-                break;
-        }
-
-        String questionBrief = "What is " + position + operatorMap.get(operator.trim()) + unitsToMove + "?";
-        binding.numberLineQuestion.setText(questionBrief);
-
+        binding.numberLineQuestion.setText("What is " + position + " " + operator.trim() + " " + unitsToMove + "?");
         questionDesc = "You're standing on " + position + ". " +
-                "What is " + position + operator + unitsToMove + "? " +
-                "Move " + unitsToMove + " units to the " + direction + " of Number line.";
+                "What is " + position + operator + unitsToMove + "? Move " + unitsToMove + " units to the " + direction;
 
         tts.speak(questionDesc);
-
         return position + operator + unitsToMove + " equals " + answer;
     }
 
     private void setupObservers() {
-        viewModel.lineStart.observe(getViewLifecycleOwner(), start -> {
-            int end = viewModel.lineEnd.getValue() != null ? viewModel.lineEnd.getValue() : start + 10;
-            int position = viewModel.currentPosition.getValue() != null ? viewModel.currentPosition.getValue() : start;
-            binding.numberLineView.updateNumberLine(start, end, position);
-        });
-
-        viewModel.lineEnd.observe(getViewLifecycleOwner(), end -> {
-            int start = viewModel.lineStart.getValue() != null ? viewModel.lineStart.getValue() : end - 10;
-            int position = viewModel.currentPosition.getValue() != null ? viewModel.currentPosition.getValue() : start;
-            binding.numberLineView.updateNumberLine(start, end, position);
-        });
-
         viewModel.currentPosition.observe(getViewLifecycleOwner(), position -> {
             binding.currentPositionTv.setText(CURRENT_POSITION + position);
-
             if (position == answer) {
-                tts.speak("Correct Answer! " + correctAnswerDesc + ".");
+                tts.speak("Correct Answer! " + correctAnswerDesc);
                 appreciateUser();
+            } else {
+                tts.speak("You're standing on " + position + ". Swipe left to decrease, right to increase.");
             }
         });
     }
 
     private void appreciateUser() {
-        String message = "Good going";
-        int gifResource = R.drawable.right;
-
         LayoutInflater inflater = getLayoutInflater();
         DialogResultBinding dialogBinding = DialogResultBinding.inflate(inflater);
-        View dialogView = dialogBinding.getRoot();
+        AlertDialog dialog = new AlertDialog.Builder(requireContext())
+                .setView(dialogBinding.getRoot())
+                .create();
 
-        Glide.with(this)
-                .asGif()
-                .load(gifResource)
-                .into(dialogBinding.gifImageView);
+        dialogBinding.messageTextView.setText("Good going");
+        Glide.with(this).asGif().load(R.drawable.right).into(dialogBinding.gifImageView);
 
-        dialogBinding.messageTextView.setText(message);
-
-        new AlertDialog.Builder(requireContext())
-                .setView(dialogView)
-                .setPositiveButton("Continue", (dialog, which) -> {
-                    dialog.dismiss();
-                    correctAnswerDesc = askNewQuestion(answer);
-                })
-                .create()
-                .show();
+        dialog.show();
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            dialog.dismiss();
+            tts.speak("Next question. " + correctAnswerDesc);
+            correctAnswerDesc = askNewQuestion(answer);
+        }, 2000);
     }
 
     @Override
