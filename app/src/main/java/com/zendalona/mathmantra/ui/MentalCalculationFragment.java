@@ -4,9 +4,11 @@ import android.app.AlertDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.speech.tts.TextToSpeech;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -18,26 +20,45 @@ import com.zendalona.mathmantra.R;
 import com.zendalona.mathmantra.databinding.DialogResultBinding;
 import com.zendalona.mathmantra.databinding.FragmentMentalCalculationBinding;
 
+import java.util.Locale;
 import java.util.Random;
-
-import net.objecthunter.exp4j.Expression;
-import net.objecthunter.exp4j.ExpressionBuilder;
+import java.util.Stack;
 
 public class MentalCalculationFragment extends Fragment {
 
     private FragmentMentalCalculationBinding binding;
     private String currentExpression;
     private int correctAnswer;
+    private TextToSpeech textToSpeech;
+    private boolean isQuestionAnsweredCorrectly = false; // Track correctness
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentMentalCalculationBinding.inflate(inflater, container, false);
+        setupTextToSpeech();
         generateNewQuestion();
 
         binding.submitAnswerBtn.setOnClickListener(v -> checkAnswer());
 
+        // Auto-submit on keyboard 'tick' or 'right' button press
+        binding.answerEt.setOnEditorActionListener((textView, actionId, keyEvent) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                checkAnswer();
+                return true;
+            }
+            return false;
+        });
+
         return binding.getRoot();
+    }
+
+    private void setupTextToSpeech() {
+        textToSpeech = new TextToSpeech(getContext(), status -> {
+            if (status == TextToSpeech.SUCCESS) {
+                textToSpeech.setLanguage(Locale.US);
+            }
+        });
     }
 
     private void generateNewQuestion() {
@@ -55,22 +76,21 @@ public class MentalCalculationFragment extends Fragment {
         currentExpression = num1 + " " + op1 + " " + num2 + " " + op2 + " " + num3 + " " + op3 + " " + num4;
         correctAnswer = evaluateExpression(currentExpression);
 
-        String displayText = currentExpression + " = ?";
+        String displayText = formatExpressionForDisplay(currentExpression) + " = ?";
         binding.mentalCalculation.setText(displayText);
 
-        // Update content description for accessibility
-        binding.mentalCalculation.setContentDescription("Math question. " + currentExpression + ". What is the answer?");
+        // Accessibility description
+        String spokenExpression = "Math question: " + formatExpressionForSpeech(currentExpression) + ". What is the answer?";
+        binding.mentalCalculation.setContentDescription(spokenExpression);
+
+        // Read the question aloud when the screen opens
+        speak(spokenExpression);
+
+        isQuestionAnsweredCorrectly = false; // Reset correctness tracker
     }
 
-
     private int evaluateExpression(String expression) {
-        try {
-            Expression exp = new ExpressionBuilder(expression).build();
-            return (int) Math.round(exp.evaluate()); // Evaluates using BODMAS
-        } catch (Exception e) {
-            e.printStackTrace();
-            return 0;
-        }
+        return evaluateMath(expression);
     }
 
     private void checkAnswer() {
@@ -81,11 +101,12 @@ public class MentalCalculationFragment extends Fragment {
         }
 
         boolean isCorrect = Integer.parseInt(userInput) == correctAnswer;
+        isQuestionAnsweredCorrectly = isCorrect;
         showResultDialog(isCorrect);
     }
 
     private void showResultDialog(boolean isCorrect) {
-        String message = isCorrect ? "Correct Answer!" : "Wrong Answer! The correct answer is " + correctAnswer;
+        String message = isCorrect ? "Correct Answer!" : "Wrong Answer! Try again.";
         int gifResource = isCorrect ? R.drawable.right : R.drawable.wrong;
 
         LayoutInflater inflater = getLayoutInflater();
@@ -98,6 +119,7 @@ public class MentalCalculationFragment extends Fragment {
                 .into(dialogBinding.gifImageView);
 
         dialogBinding.messageTextView.setText(message);
+        speak(message); // Read the result message aloud
 
         AlertDialog dialog = new AlertDialog.Builder(requireContext())
                 .setView(dialogView)
@@ -109,14 +131,98 @@ public class MentalCalculationFragment extends Fragment {
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             if (dialog.isShowing()) {
                 dialog.dismiss();
-                generateNewQuestion();
+                if (isCorrect) {
+                    generateNewQuestion(); // Only change question if correct
+                }
             }
-        }, 3000);
+        }, 2000);
+    }
+
+    private void speak(String text) {
+        if (textToSpeech != null) {
+            textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, null);
+        }
+    }
+
+    private String formatExpressionForDisplay(String expression) {
+        return expression.replace("/", "÷");
+    }
+
+    private String formatExpressionForSpeech(String expression) {
+        return expression.replace("+", " plus ")
+                .replace("-", " minus ")
+                .replace("*", " times ")
+                .replace("/", " divided by ");
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        if (textToSpeech != null) {
+            textToSpeech.stop();
+            textToSpeech.shutdown();
+        }
         binding = null;
     }
+
+    private int evaluateMath(String expression) {
+        Stack<Integer> numbers = new Stack<>();
+        Stack<Character> operators = new Stack<>();
+
+        String[] tokens = expression.split(" ");
+        for (String token : tokens) {
+            if (isNumber(token)) {
+                numbers.push(Integer.parseInt(token));
+            } else {
+                while (!operators.isEmpty() && precedence(operators.peek()) >= precedence(token.charAt(0))) {
+                    numbers.push(applyOp(operators.pop(), numbers.pop(), numbers.pop()));
+                }
+                operators.push(token.charAt(0));
+            }
+        }
+
+        while (!operators.isEmpty()) {
+            numbers.push(applyOp(operators.pop(), numbers.pop(), numbers.pop()));
+        }
+
+        return numbers.pop();
+    }
+
+    private boolean isNumber(String str) {
+        try {
+            Integer.parseInt(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    private int precedence(char op) {
+        switch (op) {
+            case '+':
+            case '-':
+                return 1;
+            case '*':
+            case '/':
+                return 2;
+            default:
+                return -1;
+        }
+    }
+
+    private int applyOp(char op, int b, int a) {
+        switch (op) {
+            case '+':
+                return a + b;
+            case '-':
+                return a - b;
+            case '*':
+                return a * b;
+            case '/':
+                return (b == 0) ? 0 : a / b; // Handle division by zero
+            default:
+                return 0;
+        }
+    }
+
 }
