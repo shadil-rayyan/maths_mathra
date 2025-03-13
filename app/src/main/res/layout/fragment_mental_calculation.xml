@@ -35,6 +35,7 @@
             android:layout_margin="10dp"
             android:textSize="40sp"
             android:focusable="true"
+            android:focusableInTouchMode="true"
             android:clickable="true"
             android:contentDescription="Math question. what is 2 plus 2 equals what? Double tap to repeat the question. there i" />
 

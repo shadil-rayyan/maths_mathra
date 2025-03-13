@@ -128,4 +128,8 @@ public class RandomValueGenerator {
     public float generateRandomDegree() {
         return random.nextInt(360); // Random number between 0 - 360
     }
+    public int generateNumberBetween(int min, int max) {
+        return random.nextInt((max - min) + 1) + min;
+    }
+
 }
