@@ -2,22 +2,25 @@ package com.zendalona.mathmantra;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.graphics.Region;
 import android.view.Display;
+import android.view.MotionEvent;
 
 import com.zendalona.mathmantra.databinding.ActivityMainBinding;
-import com.zendalona.mathmantra.ui.DashboardFragment;
 import com.zendalona.mathmantra.ui.LandingPageFragment;
-import com.zendalona.mathmantra.ui.LearningPageFragment;
 import com.zendalona.mathmantra.utils.FragmentNavigation;
 import com.zendalona.mathmantra.utils.PermissionManager;
 import com.zendalona.mathmantra.utils.AccessibilityUtils;
@@ -29,13 +32,6 @@ public class MainActivity extends AppCompatActivity implements FragmentNavigatio
 
     // Static reference to accessibility service
     private static MathsManthraAccessibilityService appAccessibilityService;
-    private Region getRegionOfFullScreen(MainActivity activity) {
-        int screenWidth = activity.getResources().getDisplayMetrics().widthPixels;
-        int screenHeight = activity.getResources().getDisplayMetrics().heightPixels;
-        return new Region(0, 0, screenWidth, screenHeight);
-    }
-
-    // Static instance of AccessibilityUtils
     private static AccessibilityUtils accessibilityUtils = new AccessibilityUtils();
 
     @Override
@@ -51,28 +47,32 @@ public class MainActivity extends AppCompatActivity implements FragmentNavigatio
 
         setSupportActionBar(binding.toolbar);
         binding.toolbar.setNavigationIconTint(getColor(android.R.color.white));
+        binding.toolbar.setNavigationContentDescription("Back Button");
+
+        // Hide the Up button initially (so it doesn't appear on Landing Page when app starts)
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(false);
+        }
 
         if (savedInstanceState == null) {
             LandingPageFragment landingFragment = new LandingPageFragment();
             loadFragment(landingFragment, FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-            updateUpButtonVisibility(landingFragment);
         }
 
         permissionManager = new PermissionManager(this, new PermissionManager.PermissionCallback() {
             @Override
             public void onPermissionGranted() {
-                Log.d("PermissionManager.PermissionCallback", "Granted!");
+                Log.d("PermissionManager", "Granted!");
             }
 
             @Override
             public void onPermissionDenied() {
-                Log.w("PermissionManager.PermissionCallback", "Denied!");
+                Log.w("PermissionManager", "Denied!");
             }
         });
-
         permissionManager.requestMicrophonePermission();
 
-        // 🔔 Add Accessibility Service Check Here
         checkAccessibilityService();
     }
 
@@ -82,16 +82,9 @@ public class MainActivity extends AppCompatActivity implements FragmentNavigatio
         if (fragmentManager.getBackStackEntryCount() > 0) {
             fragmentManager.popBackStack();
         } else {
-            // If no fragments are left in back stack, reload the landing page
             loadFragment(new LandingPageFragment(), FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
         }
         return true;
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        permissionManager.handlePermissionsResult(requestCode, permissions, grantResults);
     }
 
     public void loadFragment(Fragment fragment, int transition) {
@@ -105,7 +98,6 @@ public class MainActivity extends AppCompatActivity implements FragmentNavigatio
         } else {
             fragmentTransaction.addToBackStack(null);
         }
-
         fragmentTransaction.commit();
         updateUpButtonVisibility(fragment);
     }
@@ -115,62 +107,80 @@ public class MainActivity extends AppCompatActivity implements FragmentNavigatio
         if (actionBar != null) {
             boolean isHomePage = fragment instanceof LandingPageFragment;
             actionBar.setDisplayHomeAsUpEnabled(!isHomePage);
+            actionBar.setHomeActionContentDescription("Back Button");
         }
     }
 
-    // Static method to allow the AccessibilityService to set itself
-    public static void set_accessibility_service(MathsManthraAccessibilityService myAccessibilityService) {
+    public static void setAccessibilityService(MathsManthraAccessibilityService myAccessibilityService) {
         appAccessibilityService = myAccessibilityService;
     }
 
-    // Optional: Provide access to AccessibilityUtils if needed elsewhere
     public static AccessibilityUtils getAccessibilityUtils() {
         return accessibilityUtils;
     }
 
-    // Optional: Method to interact with the accessibility service if needed
     public static void updateWindowState() {
         Log.d("MainActivity", "Accessibility Event Triggered: Updating Window State");
-        // Example logic; you can add more here if needed.
     }
 
     private void checkAccessibilityService() {
-        AccessibilityUtils utils = new AccessibilityUtils();
-
-        boolean isTalkBackOn = utils.isSystemExploreByTouchEnabled(this);
+        boolean isTalkBackOn = accessibilityUtils.isSystemExploreByTouchEnabled(this);
         boolean isServiceEnabled = AccessibilityUtils.isMathsManthraAccessibilityServiceEnabled(this);
 
         if (isTalkBackOn && !isServiceEnabled) {
             Log.w("AccessibilityCheck", "TalkBack is ON but MathsManthraAccessibilityService is OFF. Redirecting user.");
-            AccessibilityUtils.redirectToAccessibilitySettings(this);
+//            showAccessibilityDialog();
         } else {
             Log.d("AccessibilityCheck", "Accessibility check passed.");
         }
     }
 
+//    private void showAccessibilityDialog() {
+//        new AlertDialog.Builder(this)
+//                .setTitle("Enable Accessibility Service")
+//                .setMessage("MathsManthra needs Accessibility Service to function properly. Would you like to enable it?")
+//                .setPositiveButton("Enable", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+//                        startActivity(intent);
+//                    }
+//                })
+//                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        dialog.dismiss();
+//                    }
+//                })
+//                .show();
+//    }
+
     public void disableExploreByTouch() {
-        try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && appAccessibilityService != null) {
-                Region fullScreenRegion = getRegionOfFullScreen(this);
-
-                Log.e("AAAA disableExploreByTouch", "Region " + fullScreenRegion);
-
-                appAccessibilityService.setTouchExplorationPassthroughRegion(Display.DEFAULT_DISPLAY, fullScreenRegion);
-                appAccessibilityService.setGestureDetectionPassthroughRegion(Display.DEFAULT_DISPLAY, fullScreenRegion);
-
-                Log.e("AAAA disableExploreByTouch", "Explore by Touch disabled");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && appAccessibilityService != null) {
+            Region fullScreenRegion = new Region(0, 0, getResources().getDisplayMetrics().widthPixels, getResources().getDisplayMetrics().heightPixels);
+            appAccessibilityService.setTouchExplorationPassthroughRegion(Display.DEFAULT_DISPLAY, fullScreenRegion);
+            appAccessibilityService.setGestureDetectionPassthroughRegion(Display.DEFAULT_DISPLAY, fullScreenRegion);
         }
     }
 
     public void resetExploreByTouch() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && appAccessibilityService != null) {
-            Region emptyRegion = new Region();  // Clear passthrough regions (restore normal TalkBack behavior)
+            Region emptyRegion = new Region();
             appAccessibilityService.setTouchExplorationPassthroughRegion(Display.DEFAULT_DISPLAY, emptyRegion);
             appAccessibilityService.setGestureDetectionPassthroughRegion(Display.DEFAULT_DISPLAY, emptyRegion);
         }
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (event.getPointerCount() == 2) {
+            if (event.getActionMasked() == MotionEvent.ACTION_MOVE) {
+                if (event.getY(0) < event.getHistoricalY(0, 0) && event.getY(1) < event.getHistoricalY(1, 0)) {
+                    onBackPressed();
+                    return true;
+                }
+            }
+        }
+        return super.onTouchEvent(event);
+    }
 }

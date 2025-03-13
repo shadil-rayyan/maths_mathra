@@ -12,15 +12,18 @@
         android:background="@color/surface"
         app:title="MathMantra"
         app:titleTextColor="@color/primaryText"
+        android:importantForAccessibility="no"
+        android:focusable="false"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="parent"/>
+
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:focusable="false"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar"

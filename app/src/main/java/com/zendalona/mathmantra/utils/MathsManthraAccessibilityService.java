@@ -43,7 +43,7 @@ public class MathsManthraAccessibilityService extends AccessibilityService {
         super.onServiceConnected();
 
         // Set this service in MainActivity for use
-        MainActivity.set_accessibility_service(this);
+//        MainActivity.set_accessibility_service(this);
 
         // Notify user that the accessibility service is activated
         Toast.makeText(this, "Accessibility Service Activated", Toast.LENGTH_SHORT).show();

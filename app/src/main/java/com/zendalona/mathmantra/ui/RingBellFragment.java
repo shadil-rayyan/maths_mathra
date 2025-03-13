@@ -3,10 +3,14 @@ package com.zendalona.mathmantra.ui;
 import android.app.AlertDialog;
 import android.os.Bundle;
 import android.os.Handler;
-import androidx.fragment.app.Fragment;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import com.bumptech.glide.Glide;
 import com.zendalona.mathmantra.R;
 import com.zendalona.mathmantra.databinding.DialogResultBinding;
@@ -24,43 +28,52 @@ public class RingBellFragment extends Fragment {
     private RandomValueGenerator randomValueGenerator;
     private TTSUtility tts;
     private boolean gameCompleted = false;
-    private int count, target;
+    private int count = 0, target;
+    private boolean isShakingAllowed = true;
+    private final Handler shakeHandler = new Handler();
 
     public RingBellFragment() {
         // Required empty public constructor
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         soundEffectUtility = SoundEffectUtility.getInstance(requireContext());
         accelerometerUtility = new AccelerometerUtility(requireContext());
+        randomValueGenerator = new RandomValueGenerator();
+        tts = new TTSUtility(requireContext());
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentRingBellBinding.inflate(inflater, container, false);
-        randomValueGenerator = new RandomValueGenerator();
-        tts = new TTSUtility(requireContext());
-
         startGame();
         return binding.getRoot();
     }
 
     private void ringBell() {
-        if (gameCompleted) return;
+        if (gameCompleted || !isShakingAllowed) return;
+
+        isShakingAllowed = false;
+        shakeHandler.postDelayed(() -> isShakingAllowed = true, 500);
 
         binding.bellAnimationView.playAnimation();
         soundEffectUtility.playSound(R.raw.bell_ring);
         count++;
+
+        // Update shake count
         binding.ringCount.setText(String.valueOf(count));
-        binding.ringCount.setContentDescription("Shake count: " + count);
+
+        // Announce shake count dynamically instead of making it focusable
+        tts.speak("Shake count: " + count);
 
         if (count == target) {
             gameCompleted = true;
             evaluateGameResult();
         }
     }
+
 
     private void evaluateGameResult() {
         new Handler().postDelayed(() -> {
@@ -69,7 +82,7 @@ public class RingBellFragment extends Fragment {
             } else {
                 showFailureDialog();
             }
-        }, 2000); // Delay check
+        }, 2000); // Delay before showing the result
     }
 
     private void showSuccessDialog() {
@@ -81,17 +94,14 @@ public class RingBellFragment extends Fragment {
     }
 
     private void showResultDialog(String message, int gifResource) {
-        LayoutInflater inflater = getLayoutInflater();
-        DialogResultBinding dialogBinding = DialogResultBinding.inflate(inflater);
-        View dialogView = dialogBinding.getRoot();
-
+        DialogResultBinding dialogBinding = DialogResultBinding.inflate(getLayoutInflater());
         Glide.with(this).asGif().load(gifResource).into(dialogBinding.gifImageView);
         dialogBinding.messageTextView.setText(message);
 
         tts.speak(message + ", Click continue!");
 
         new AlertDialog.Builder(requireContext())
-                .setView(dialogView)
+                .setView(dialogBinding.getRoot())
                 .setPositiveButton("Continue", (dialog, which) -> {
                     dialog.dismiss();
                     startGame();
@@ -104,37 +114,58 @@ public class RingBellFragment extends Fragment {
         gameCompleted = false;
         count = 0;
         binding.ringCount.setText("0");
+
         binding.bellAnimationView.setVisibility(View.VISIBLE);
         target = randomValueGenerator.generateNumberForCountGame();
 
+        // Generate instruction text
         String targetText = "Shake the bell " + target + " times";
-        tts.speak(targetText);
         binding.ringMeTv.setText(targetText);
-        binding.ringMeTv.requestFocus();
+
+        // Set accessibility properties
+        binding.ringMeTv.setAccessibilityLiveRegion(View.ACCESSIBILITY_LIVE_REGION_POLITE);
+        binding.ringMeTv.setFocusable(true);
+        binding.ringMeTv.setFocusableInTouchMode(true);
+
+        // Ensure UI updates first, then announce
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            binding.ringMeTv.requestFocus();
+            binding.ringMeTv.announceForAccessibility(targetText);
+        }, 500); // Small delay to prevent focus from jumping
+
+        // Read out the instruction using TTS
+        tts.speak(targetText);
+
+        // Allow shaking after speech
+        new Handler(Looper.getMainLooper()).postDelayed(() -> isShakingAllowed = true, 3000);
     }
+
+
+
 
     @Override
     public void onResume() {
         super.onResume();
+        accelerometerUtility.registerListener();
+        isShakingAllowed = true; // Reset shake control
 
-        new Thread(() -> {
-            while (isVisible() && !gameCompleted) {
-                try {
-                    Thread.sleep(500); // Prevent multiple shakes
-                    if (accelerometerUtility.isDeviceShaken()) {
-                        requireActivity().runOnUiThread(this::ringBell);
-                    }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+        // Periodically check for shake
+        shakeHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (isVisible() && !gameCompleted && accelerometerUtility.isDeviceShaken()) {
+                    requireActivity().runOnUiThread(RingBellFragment.this::ringBell);
                 }
+                shakeHandler.postDelayed(this, 500);
             }
-        }).start();
+        }, 500);
     }
 
     @Override
     public void onPause() {
         super.onPause();
         accelerometerUtility.unregisterListener();
+        shakeHandler.removeCallbacksAndMessages(null); // Stop shake detection
         tts.stop(); // Prevent TalkBack from reading previous screen
     }
 
