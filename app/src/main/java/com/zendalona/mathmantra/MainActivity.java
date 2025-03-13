@@ -130,31 +130,31 @@ public class MainActivity extends AppCompatActivity implements FragmentNavigatio
 
         if (isTalkBackOn && !isServiceEnabled) {
             Log.w("AccessibilityCheck", "TalkBack is ON but MathsManthraAccessibilityService is OFF. Redirecting user.");
-//            showAccessibilityDialog();
+            showAccessibilityDialog();
         } else {
             Log.d("AccessibilityCheck", "Accessibility check passed.");
         }
     }
 
-//    private void showAccessibilityDialog() {
-//        new AlertDialog.Builder(this)
-//                .setTitle("Enable Accessibility Service")
-//                .setMessage("MathsManthra needs Accessibility Service to function properly. Would you like to enable it?")
-//                .setPositiveButton("Enable", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
-//                        startActivity(intent);
-//                    }
-//                })
-//                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        dialog.dismiss();
-//                    }
-//                })
-//                .show();
-//    }
+    private void showAccessibilityDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("Enable Accessibility Service")
+                .setMessage("MathsManthra needs Accessibility Service to function properly. Would you like to enable it?")
+                .setPositiveButton("Enable", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+                        startActivity(intent);
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .show();
+    }
 
     public void disableExploreByTouch() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && appAccessibilityService != null) {

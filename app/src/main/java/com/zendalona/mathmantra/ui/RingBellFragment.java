@@ -7,7 +7,6 @@ import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -31,6 +30,7 @@ public class RingBellFragment extends Fragment {
     private int count = 0, target;
     private boolean isShakingAllowed = true;
     private final Handler shakeHandler = new Handler();
+    private final Handler gameHandler = new Handler(Looper.getMainLooper());
 
     public RingBellFragment() {
         // Required empty public constructor
@@ -58,14 +58,11 @@ public class RingBellFragment extends Fragment {
         isShakingAllowed = false;
         shakeHandler.postDelayed(() -> isShakingAllowed = true, 500);
 
+        tts.stop(); // Stop current speech if shaking occurs
         binding.bellAnimationView.playAnimation();
         soundEffectUtility.playSound(R.raw.bell_ring);
         count++;
-
-        // Update shake count
         binding.ringCount.setText(String.valueOf(count));
-
-        // Announce shake count dynamically instead of making it focusable
         tts.speak("Shake count: " + count);
 
         if (count == target) {
@@ -74,9 +71,8 @@ public class RingBellFragment extends Fragment {
         }
     }
 
-
     private void evaluateGameResult() {
-        new Handler().postDelayed(() -> {
+        gameHandler.postDelayed(() -> {
             if (count == target) {
                 showSuccessDialog();
             } else {
@@ -104,7 +100,8 @@ public class RingBellFragment extends Fragment {
                 .setView(dialogBinding.getRoot())
                 .setPositiveButton("Continue", (dialog, which) -> {
                     dialog.dismiss();
-                    startGame();
+                    tts.speak("Next question");
+                    gameHandler.postDelayed(this::startGame, 1000);
                 })
                 .create()
                 .show();
@@ -114,42 +111,30 @@ public class RingBellFragment extends Fragment {
         gameCompleted = false;
         count = 0;
         binding.ringCount.setText("0");
-
         binding.bellAnimationView.setVisibility(View.VISIBLE);
         target = randomValueGenerator.generateNumberForCountGame();
-
-        // Generate instruction text
         String targetText = "Shake the bell " + target + " times";
         binding.ringMeTv.setText(targetText);
 
-        // Set accessibility properties
         binding.ringMeTv.setAccessibilityLiveRegion(View.ACCESSIBILITY_LIVE_REGION_POLITE);
         binding.ringMeTv.setFocusable(true);
         binding.ringMeTv.setFocusableInTouchMode(true);
 
-        // Ensure UI updates first, then announce
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             binding.ringMeTv.requestFocus();
             binding.ringMeTv.announceForAccessibility(targetText);
-        }, 500); // Small delay to prevent focus from jumping
+        }, 500);
 
-        // Read out the instruction using TTS
         tts.speak(targetText);
-
-        // Allow shaking after speech
-        new Handler(Looper.getMainLooper()).postDelayed(() -> isShakingAllowed = true, 3000);
+        gameHandler.postDelayed(() -> isShakingAllowed = true, 3000);
     }
-
-
-
 
     @Override
     public void onResume() {
         super.onResume();
         accelerometerUtility.registerListener();
-        isShakingAllowed = true; // Reset shake control
+        isShakingAllowed = true;
 
-        // Periodically check for shake
         shakeHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -165,8 +150,9 @@ public class RingBellFragment extends Fragment {
     public void onPause() {
         super.onPause();
         accelerometerUtility.unregisterListener();
-        shakeHandler.removeCallbacksAndMessages(null); // Stop shake detection
-        tts.stop(); // Prevent TalkBack from reading previous screen
+        shakeHandler.removeCallbacksAndMessages(null);
+        gameHandler.removeCallbacksAndMessages(null);
+        tts.stop();
     }
 
     @Override

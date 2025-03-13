@@ -3,6 +3,7 @@ package com.zendalona.mathmantra.ui;
 import android.app.AlertDialog;
 import android.graphics.Region;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -28,6 +29,8 @@ public class TapTablaFragment extends Fragment {
     private TTSUtility tts;
     private int count, target;
     private boolean talkBackEnabled = false;
+    private Handler handler = new Handler();
+    private Runnable targetReachedRunnable;
 
     public TapTablaFragment() {
         // Required empty public constructor
@@ -37,7 +40,6 @@ public class TapTablaFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         soundEffectUtility = SoundEffectUtility.getInstance(requireContext());
-        //check if talkback is on
         talkBackEnabled = AccessibilityUtils.isMathsManthraAccessibilityServiceEnabled(requireContext());
     }
 
@@ -46,11 +48,13 @@ public class TapTablaFragment extends Fragment {
         binding = FragmentTapTablaBinding.inflate(inflater, container, false);
         randomValueGenerator = new RandomValueGenerator();
         tts = new TTSUtility(requireContext());
+
         startGame();
 
-        // Always allow tapping tabla directly
+        // Allow tapping tabla directly
         binding.tablaAnimationView.setOnClickListener(v -> onTablaTapped());
-        // make sure that the drum will work if touched anywhere on screen
+
+        // Allow tapping anywhere
         setupGlobalTouchHandler();
 
         return binding.getRoot();
@@ -59,7 +63,6 @@ public class TapTablaFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        // Disable Explore By Touch if TalkBack is enabled
         if (talkBackEnabled) {
             ((MainActivity) requireActivity()).disableExploreByTouch();
         }
@@ -68,7 +71,6 @@ public class TapTablaFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        // Restore Explore By Touch if TalkBack was enabled
         if (talkBackEnabled) {
             ((MainActivity) requireActivity()).resetExploreByTouch();
         }
@@ -88,47 +90,75 @@ public class TapTablaFragment extends Fragment {
     }
 
     private void onTablaTapped() {
-        binding.tapCount.setText(String.valueOf(++count));
+        count++;
+        binding.tapCount.setText(String.valueOf(count));
         binding.tablaAnimationView.playAnimation();
         soundEffectUtility.playSound(R.raw.drums_sound);
 
+        // Stop previous TTS and announce new count
+        tts.stopSpeaking();
+        tts.speak("Tap count: " + count);
+
+        // Check for correct answer or exceeding target
         if (count == target) {
-            appreciateUser();
+            handler.postDelayed(targetReachedRunnable = () -> appreciateUser(), 3000);
+        } else if (count > target) {
+            handler.removeCallbacks(targetReachedRunnable);
+            showResultDialog(false);
         }
     }
 
     private void appreciateUser() {
-        String message = "Well done";
-        int gifResource = R.drawable.right;
+        showResultDialog(true);
+    }
+
+    private void showResultDialog(boolean isCorrect) {
+        handler.removeCallbacks(targetReachedRunnable);
+        String message = isCorrect ? "Well done" : "Try again";
+        int gifResource = isCorrect ? R.drawable.right : R.drawable.wrong;
 
         DialogResultBinding dialogBinding = DialogResultBinding.inflate(getLayoutInflater());
         Glide.with(this).asGif().load(gifResource).into(dialogBinding.gifImageView);
 
         dialogBinding.messageTextView.setText(message);
-        tts.speak("Well done! Click on continue!");
+        tts.speak(message + ". Next question!");
 
-        new AlertDialog.Builder(requireContext())
+        AlertDialog dialog = new AlertDialog.Builder(requireContext())
                 .setView(dialogBinding.getRoot())
-                .setPositiveButton("Continue", (dialog, which) -> {
-                    dialog.dismiss();
-                    binding.tapCount.setText("0");
-                    startGame();
-                })
-                .create()
-                .show();
+                .create();
+
+        dialog.show();
+
+        // Auto-dismiss the dialog after 2 seconds
+        handler.postDelayed(() -> {
+            if (dialog.isShowing()) {
+                dialog.dismiss();
+                startGame(); // Start the next question after the dialog is closed
+            }
+        }, 2000);
     }
+
 
     private void startGame() {
         count = 0;
         target = randomValueGenerator.generateNumberForCountGame();
         String targetText = "Tap the drum " + target + " times";
-        tts.speak(targetText);
+
+        // Delay TTS announcement by 4 seconds to allow TalkBack users to process the screen
+        handler.postDelayed(() ->
+                        tts.speak("This is the drum play screen. " + targetText + ". single tap anywhere to play the drum sound."),
+                4000
+        );
+
         binding.tapMeTv.setText(targetText);
     }
+
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        handler.removeCallbacksAndMessages(null); // Stop any delayed tasks
+        tts.stopSpeaking(); // Stop TTS when exiting the screen
         binding = null;
     }
 }

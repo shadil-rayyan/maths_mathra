@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    android:id="@+id/root_frame"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
     tools:context=".ui.TapTablaFragment"
-    android:contentDescription="This is the Tabla Play Screen. Double tap on the drum animation to play tabla sound. The app is fully loaded and ready.">
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:importantForAccessibility="yes"
+    android:contentDescription="This is the drum  Play Screen. Tap the drum [target] times. Double tap anywhere to play the tabla sound.">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/main"

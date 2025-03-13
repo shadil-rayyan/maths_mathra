@@ -24,6 +24,11 @@ public class TTSUtility {
             tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, null);
         }
     }
+    public void stopSpeaking() {
+        if (tts != null && tts.isSpeaking()) {
+            tts.stop();
+        }
+    }
 
     public void setSpeechRate(float rate) {
         tts.setSpeechRate(rate);

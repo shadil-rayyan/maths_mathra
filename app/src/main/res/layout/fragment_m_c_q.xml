@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/background"
     tools:context=".ui.MCQFragment"
-    android:contentDescription="Multiple choice question screen. Choose the correct answer to the question displayed.">
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,7 +22,7 @@
             android:textColor="@color/primaryText"
             android:textSize="24sp"
             android:layout_margin="10dp"
-            android:contentDescription="Instruction. What is the value of the following equation?" />
+            />
 
         <!-- Math Question Text -->
         <com.google.android.material.textview.MaterialTextView
@@ -36,7 +36,7 @@
             android:textSize="48sp"
             android:focusable="true"
             android:clickable="true"
-            android:contentDescription="Question. What is 2 plus 2? Double tap to repeat." />
+            android:contentDescription="Question. What is 2 plus 2? Double tap to repeat. there are 4 option are below select any one of them" />
 
         <!-- First Row of Options -->
         <LinearLayout
@@ -54,7 +54,7 @@
                 android:text="100"
                 android:textColor="@color/primaryText"
                 android:backgroundTint="@color/button"
-                android:contentDescription="Option A. 100. Double tap to select." />
+                android:contentDescription=" option A.100. Double tap to select." />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/option_b"
