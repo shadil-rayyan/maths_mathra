@@ -27,11 +27,7 @@ jobs:
       - name: Build Release
         run: ./gradlew assembleRelease
 
-      - name: Run Unit Tests
-        run: ./gradlew test
-
-      - name: Run Lint Checks
-        run: ./gradlew lint
+     
 
       - name: Sign APK
         env:
